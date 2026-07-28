@@ -20,6 +20,23 @@ All notable changes to this project will be documented in this file.
 
 
 
+
+## [2.11.2] - 2026-07-28
+
+### Features
+
+- **Control Project Change Summary storage per Place** — Dashboard Settings now shows the actual storage used by completed Project Change Summary sessions and lets you choose a 100MB, 500MB, 1000MB, or Unlimited policy. The default 500MB limit is applied independently to each Place, and you can preview the cleanup, save the policy, or run it immediately without deleting active sessions or unrelated Sync and UI Studio data.
+
+### Bug Fixes
+
+- **Recover Project Sync after an interrupted index save** — If Sync starts with a truncated or invalid index, WEPPY now restores a valid saved copy or rebuilds the index from the local mirror instead of failing with a JSON parsing error. Unrecoverable files are preserved for diagnosis, and recovery details are available in Sync status.
+- **Keep Script and LocalScript file types during incremental Sync** — Updating source no longer changes a Script or LocalScript into a ModuleScript when its optional properties file is absent, so existing `.server.luau` and `.client.luau` paths remain intact.
+- **Prevent duplicate same-name objects during forward Sync** — WEPPY no longer mistakes its own local mirror writes for user edits and sends them back to Studio as restore requests. This prevents collision suffixes and same-name siblings from being duplicated during rapid create, rename, move, and delete sequences.
+
+### Stability
+
+- **More accurate storage cleanup accounting** — Project Change Summary and UI Studio cleanup now use the bytes actually stored on disk, retain complete records, and protect active data while removing the oldest eligible history first.
+
 ## [2.11.1] - 2026-07-24
 
 ### Features
