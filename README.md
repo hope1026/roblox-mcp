@@ -1,5 +1,7 @@
 # WEPPY Roblox AI Toolkit — AI Game Development for Roblox Studio
 
+[![MCP Toplist](https://mcptoplist.com/badge/glama%2Fhope1026%2Fweppy-roblox-mcp.svg)](https://mcptoplist.com/server/glama%2Fhope1026%2Fweppy-roblox-mcp)
+
 > **WEPPY Roblox AI Toolkit** is a Roblox Studio AI development product. It includes the **WEPPY MCP Server** for AI app connections and the **WEPPY Roblox Studio Plugin** for live Studio control. Claude Code, Codex, and Antigravity can also install the optional **WEPPY AI Agent Plugin** for client-native setup and workflow guidance.
 
 **Multi-Place Studio work · Generated assets to Roblox · Bidirectional sync · Automated playtest · UI Studio**
