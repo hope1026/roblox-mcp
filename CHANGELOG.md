@@ -21,6 +21,14 @@ All notable changes to this project will be documented in this file.
 
 
 
+
+## [2.11.3] - 2026-07-28
+
+### Features
+
+- **Less cluttered storage controls in Dashboard Settings** — Project Change Summary and UI Studio storage policy details now stay collapsed until needed, and only one panel opens at a time. Expanded controls use a compact desktop-first layout that remains usable with a keyboard and avoids horizontal overflow in narrow windows.
+- **Clearer storage cleanup actions** — Full deletion is now labeled `Clear all`, while `Run saved policy` explicitly runs the last saved cleanup rule without applying unsaved changes. The updated labels and guidance are available in all eight Dashboard languages.
+
 ## [2.11.2] - 2026-07-28
 
 ### Features
