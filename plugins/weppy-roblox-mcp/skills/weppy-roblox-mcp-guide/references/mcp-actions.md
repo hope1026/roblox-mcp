@@ -712,7 +712,7 @@ Get/set properties, attributes, and tags on instances. [PRO] set_calculated, set
 
 ## Tool: `manage_scripts`
 
-Manage script source code: read, write, create, delete, edit lines, search. [PRO] replace across scripts.
+Manage script source code: read, write, create, delete, edit lines, search, and validate Luau syntax. [PRO] replace across scripts.
 
 ### `manage_scripts.get_source`
 
@@ -721,7 +721,7 @@ Manage script source code: read, write, create, delete, edit lines, search. [PRO
 - Execution mode: `unspecified`
 - Param aliases: none
 - Required params:
-  - `path` - string - Path to the script instance. Used by: get_source, set_source, delete, edit_replace, edit_insert, edit_delete, search, get_dependencies, replace.
+  - `path` - string - Path to the script instance. Used by: get_source, set_source, delete, edit_replace, edit_insert, edit_delete, search, get_dependencies, replace, validate.
 - Optional params:
   - `startLine` - number - Starting line number, 1-based inclusive. Used by: get_source (paired with endLine), edit_replace, edit_delete. get_source requires an integer.
   - `endLine` - number - Ending line number, 1-based inclusive. Used by: get_source (paired with startLine), edit_replace, edit_delete. get_source requires an integer.
@@ -736,9 +736,10 @@ Manage script source code: read, write, create, delete, edit lines, search. [PRO
 - Execution mode: `unspecified`
 - Param aliases: none
 - Required params:
-  - `path` - string - Path to the script instance. Used by: get_source, set_source, delete, edit_replace, edit_insert, edit_delete, search, get_dependencies, replace.
-  - `source` - string - Script source code. Used by: set_source (required), create (optional initial source).
+  - `path` - string - Path to the script instance. Used by: get_source, set_source, delete, edit_replace, edit_insert, edit_delete, search, get_dependencies, replace, validate.
+  - `source` - string - Script source code. Used by: set_source (required), create (optional initial source), validate (one of source or path is required).
 - Optional params:
+  - `validate` - boolean - Requests full validation details when Dashboard script write validation is enabled. Used by: set_source, edit_replace, edit_insert, edit_delete.
   - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
   - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
   - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.
@@ -753,7 +754,7 @@ Manage script source code: read, write, create, delete, edit lines, search. [PRO
   - `scriptType` - "Script" | "LocalScript" | "ModuleScript" - Type of script to create. Used by: create.
   - `parent` - string - Parent path for new script. Used by: create.
 - Optional params:
-  - `source` - string - Script source code. Used by: set_source (required), create (optional initial source).
+  - `source` - string - Script source code. Used by: set_source (required), create (optional initial source), validate (one of source or path is required).
   - `name` - string - Name for new script. Used by: create.
   - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
   - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
@@ -766,7 +767,7 @@ Manage script source code: read, write, create, delete, edit lines, search. [PRO
 - Execution mode: `unspecified`
 - Param aliases: none
 - Required params:
-  - `path` - string - Path to the script instance. Used by: get_source, set_source, delete, edit_replace, edit_insert, edit_delete, search, get_dependencies, replace.
+  - `path` - string - Path to the script instance. Used by: get_source, set_source, delete, edit_replace, edit_insert, edit_delete, search, get_dependencies, replace, validate.
 - Optional params:
   - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
   - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
@@ -780,11 +781,12 @@ Manage script source code: read, write, create, delete, edit lines, search. [PRO
 - Param aliases:
   - `newLines` -> `newContent`
 - Required params:
-  - `path` - string - Path to the script instance. Used by: get_source, set_source, delete, edit_replace, edit_insert, edit_delete, search, get_dependencies, replace.
+  - `path` - string - Path to the script instance. Used by: get_source, set_source, delete, edit_replace, edit_insert, edit_delete, search, get_dependencies, replace, validate.
   - `startLine` - number - Starting line number, 1-based inclusive. Used by: get_source (paired with endLine), edit_replace, edit_delete. get_source requires an integer.
   - `endLine` - number - Ending line number, 1-based inclusive. Used by: get_source (paired with startLine), edit_replace, edit_delete. get_source requires an integer.
   - `newLines` - string - New content to replace specified lines. Used by: edit_replace. Can be multi-line.
 - Optional params:
+  - `validate` - boolean - Requests full validation details when Dashboard script write validation is enabled. Used by: set_source, edit_replace, edit_insert, edit_delete.
   - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
   - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
   - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.
@@ -797,11 +799,12 @@ Manage script source code: read, write, create, delete, edit lines, search. [PRO
 - Param aliases:
   - `lines` -> `content`
 - Required params:
-  - `path` - string - Path to the script instance. Used by: get_source, set_source, delete, edit_replace, edit_insert, edit_delete, search, get_dependencies, replace.
+  - `path` - string - Path to the script instance. Used by: get_source, set_source, delete, edit_replace, edit_insert, edit_delete, search, get_dependencies, replace, validate.
   - `afterLine` - number - Line number after which to insert. Used by: edit_insert. Use 0 to insert at beginning.
   - `content` - string - Content to insert. Used by: edit_insert. Can be multi-line.
 - Optional params:
   - `lines` - string - Content to insert after afterLine. Used by: edit_insert. Can be multi-line. Alias for content.
+  - `validate` - boolean - Requests full validation details when Dashboard script write validation is enabled. Used by: set_source, edit_replace, edit_insert, edit_delete.
   - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
   - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
   - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.
@@ -813,10 +816,11 @@ Manage script source code: read, write, create, delete, edit lines, search. [PRO
 - Execution mode: `unspecified`
 - Param aliases: none
 - Required params:
-  - `path` - string - Path to the script instance. Used by: get_source, set_source, delete, edit_replace, edit_insert, edit_delete, search, get_dependencies, replace.
+  - `path` - string - Path to the script instance. Used by: get_source, set_source, delete, edit_replace, edit_insert, edit_delete, search, get_dependencies, replace, validate.
   - `startLine` - number - Starting line number, 1-based inclusive. Used by: get_source (paired with endLine), edit_replace, edit_delete. get_source requires an integer.
   - `endLine` - number - Ending line number, 1-based inclusive. Used by: get_source (paired with startLine), edit_replace, edit_delete. get_source requires an integer.
 - Optional params:
+  - `validate` - boolean - Requests full validation details when Dashboard script write validation is enabled. Used by: set_source, edit_replace, edit_insert, edit_delete.
   - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
   - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
   - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.
@@ -828,7 +832,7 @@ Manage script source code: read, write, create, delete, edit lines, search. [PRO
 - Execution mode: `unspecified`
 - Param aliases: none
 - Required params:
-  - `path` - string - Path to the script instance. Used by: get_source, set_source, delete, edit_replace, edit_insert, edit_delete, search, get_dependencies, replace.
+  - `path` - string - Path to the script instance. Used by: get_source, set_source, delete, edit_replace, edit_insert, edit_delete, search, get_dependencies, replace, validate.
   - `pattern` - string - Search pattern (plain text or Lua pattern). Used by: search, replace.
 - Optional params:
   - `caseSensitive` - boolean - Case-sensitive search. Used by: search. Default: false.
@@ -847,7 +851,7 @@ Manage script source code: read, write, create, delete, edit lines, search. [PRO
 - Param aliases:
   - `pattern` -> `searchPattern`
 - Required params:
-  - `path` - string - Path to the script instance. Used by: get_source, set_source, delete, edit_replace, edit_insert, edit_delete, search, get_dependencies, replace.
+  - `path` - string - Path to the script instance. Used by: get_source, set_source, delete, edit_replace, edit_insert, edit_delete, search, get_dependencies, replace, validate.
   - `pattern` - string - Search pattern (plain text or Lua pattern). Used by: search, replace.
   - `replacement` - string - [PRO] Replacement text. Used by: replace.
 - Optional params:
@@ -864,8 +868,24 @@ Manage script source code: read, write, create, delete, edit lines, search. [PRO
 - Execution mode: `unspecified`
 - Param aliases: none
 - Required params:
-  - `path` - string - Path to the script instance. Used by: get_source, set_source, delete, edit_replace, edit_insert, edit_delete, search, get_dependencies, replace.
+  - `path` - string - Path to the script instance. Used by: get_source, set_source, delete, edit_replace, edit_insert, edit_delete, search, get_dependencies, replace, validate.
 - Optional params:
+  - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
+  - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
+  - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.
+
+### `manage_scripts.validate`
+
+validate raw Luau source or an existing Script path without starting a playtest.
+
+- Tier: `basic`
+- Route: `internal`
+- Execution mode: `readonly`
+- Param aliases: none
+- Required params: none
+- Optional params:
+  - `source` - string - Script source code. Used by: set_source (required), create (optional initial source), validate (one of source or path is required).
+  - `path` - string - Path to the script instance. Used by: get_source, set_source, delete, edit_replace, edit_insert, edit_delete, search, get_dependencies, replace, validate.
   - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
   - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
   - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.

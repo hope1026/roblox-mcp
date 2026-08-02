@@ -13,6 +13,7 @@ so AI can directly create, read, modify, and delete instances, scripts, properti
 terrain, and more — inside a live Studio session.
 
 - Action-based MCP tools covering the full Roblox Studio API surface
+- Basic Luau syntax validation for raw source or an existing Script without starting Playtest
 - Bidirectional project sync between Roblox Studio and local files (Pro)
 - Automated playtest: AI starts/stops Play/Run, injects test scripts, collects logs
 - UI Studio: AI creates in-game UI that matches your game's style or analyzes existing UI and suggests improvements
@@ -20,6 +21,27 @@ terrain, and more — inside a live Studio session.
 - Multi-place support (up to 5 places simultaneously)
 - Roblox Explorer VSCode extension for browsing Studio hierarchy
 - Works with Claude Code, Claude Desktop, Cursor, Codex CLI, Codex App, Gemini CLI, Antigravity / Antigravity IDE / Antigravity CLI
+
+## Luau syntax validation
+
+`manage_scripts.validate` checks either raw source or an existing Script path and
+returns syntax diagnostics without starting Playtest. It is available on Basic
+and Pro. It checks only whether the Luau source parses.
+
+The Dashboard setting at **Controls → Luau Syntax Validation** enforces whether
+successful `set_source`, `edit_replace`, `edit_insert`, and `edit_delete` calls
+validate the actual saved source. It defaults to Off. A conflicting tool
+`validate` value is ignored and a warning directs the user to that Dashboard
+setting. Validation never rolls back an applied write.
+
+Automatic valid checks do not expand the normal write response. Invalid or
+unavailable checks add details; an explicit matching `validate=true` requests
+full valid details too. The first request that needs WASM downloads the exact
+`luau-parser-v1.0.0` companion release and caches it locally. A compatible local
+`luau-compile` is the fallback. Source is parsed on the user's computer and is
+not sent to a remote validation service. If no parser is available, the action
+reports validation as unavailable without turning a successful write into a
+failure.
 
 ## Installation
 

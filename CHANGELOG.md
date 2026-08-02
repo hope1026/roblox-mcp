@@ -22,6 +22,23 @@ All notable changes to this project will be documented in this file.
 
 
 
+
+## [2.12.0] - 2026-08-02
+
+### Features
+
+- **Catch Luau syntax errors without starting Playtest** — AI agents can now validate raw source or an existing Script directly on Basic and Pro. Turn on `Controls > Luau Syntax Validation` in the Dashboard to check the source that was actually saved after supported script writes. Valid checks keep normal write responses compact, while syntax errors include details the agent can use to fix the same script. Automatic validation is Off by default, and script changes remain applied if validation finds an error or is unavailable.
+
+### Bug Fixes
+
+- **Keep MCP and Studio Sync running when Windows temporarily locks a history file** — WEPPY now retries transient file replacement failures and isolates a final Project Change Summary save failure instead of shutting down the MCP server. Later Studio Sync work can continue without restarting the session.
+- **Save Dashboard settings through temporary Windows file locks** — Dashboard setting updates now use the same bounded retry behavior when another process briefly has the settings file open.
+- **Keep duplicate-name Sync paths consistent on Windows** — Same-name sibling objects now use the correct platform path mapping, preventing the local files, Explorer tree, and Sync index from disagreeing after a collision rename.
+
+### Stability
+
+- **Include Project Change Summary save failures in bug reports** — If a history file still cannot be replaced after retries, WEPPY records the failure for that Place and includes it in the Dashboard bug-report ZIP for diagnosis.
+
 ## [2.11.3] - 2026-07-28
 
 ### Features
