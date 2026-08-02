@@ -4,6 +4,10 @@
 
 The web dashboard includes a Connection topology for multiple AI agents, the MCP server, and multiple connected Studio Targets, with copyable Studio IDs and routing status for multi-Studio workflows.
 
+`manage_scripts.validate` provides Basic syntax validation for raw Luau source or an existing Script path without starting Playtest. The Dashboard setting at **Controls → Luau Syntax Validation** defaults to Off and enforces whether successful `set_source`, `edit_replace`, `edit_insert`, and `edit_delete` calls validate the actual saved source. Conflicting tool values are ignored with a warning that points to the Dashboard setting. Automatic valid checks keep the normal write response unchanged; invalid or unavailable checks add details, while an explicit matching `validate=true` requests full valid details. Validation never rolls back an applied write.
+
+The first request that needs WASM downloads the exact `luau-parser-v1.0.0` companion release and caches it locally; a compatible local `luau-compile` is the fallback. Source is parsed on the user's computer and is not sent to a remote validation service. If no parser is available, validation reports an unavailable status without turning a successful write into a failure. It checks only whether the Luau source parses.
+
 This package intentionally does not ship a standalone full documentation surface.
 
 Canonical documentation lives on the web:
