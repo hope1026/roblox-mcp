@@ -23,6 +23,13 @@ All notable changes to this project will be documented in this file.
 
 
 
+
+## [2.12.1] - 2026-08-03
+
+### Bug Fixes
+
+- **Apply Luau syntax validation changes without reconnecting MCP** — Turning Luau Syntax Validation on or off in Dashboard Controls now affects the next supported script write in already-running MCP sessions. No `/mcp` reconnect or server restart is required.
+
 ## [2.12.0] - 2026-08-02
 
 ### Features
