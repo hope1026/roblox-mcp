@@ -24,6 +24,23 @@ All notable changes to this project will be documented in this file.
 
 
 
+
+## [2.12.2] - 2026-08-10
+
+### Features
+
+- **Attributes that point at another object now sync** — Roblox recently added the ability for an attribute to reference an instance directly (currently a Studio Beta). Until now those attributes arrived empty on the file side, and applying a file back to Studio could silently turn the reference into plain text or remove it. WEPPY now records the referenced object's location — including which one you meant when several objects along the path share a name — so the reference survives a round trip in both directions.
+
+### Bug Fixes
+
+- **Repointing a reference between same-named objects is no longer missed** — If an attribute referenced one object and you repointed it at a different object with the same name, the change could go undetected and never reach your files. These changes are now picked up.
+
+### Stability
+
+- **Attribute values of unrecognized types no longer disappear** — When Roblox adds an attribute type WEPPY doesn't know yet, the value used to be dropped during sync, and applying that file back to Studio could erase it there too. Unrecognized values are now kept as a placeholder that records the type, and applying a file back to Studio skips them so your Studio value stays as it is.
+
+- **Unresolvable references are skipped instead of overwriting your data** — If an attribute reference in a file can't be matched to an object in Studio, the attribute is now left untouched rather than being cleared or replaced with text, and the reason is written to the plugin log.
+
 ## [2.12.1] - 2026-08-03
 
 ### Bug Fixes
