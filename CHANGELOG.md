@@ -25,6 +25,13 @@ All notable changes to this project will be documented in this file.
 
 
 
+
+## [2.12.3] - 2026-08-12
+
+### Bug Fixes
+
+- **Correct spatial results for rotated objects** — `bounds`, `spatial_map`, `collision`, and `find_space` now include each object's rotation and all descendant parts when calculating world-space bounds. AI agents will no longer overlook collisions or blocked space around rotated parts, models, and folders. No tool schema or configuration changes are required.
+
 ## [2.12.2] - 2026-08-10
 
 ### Features
