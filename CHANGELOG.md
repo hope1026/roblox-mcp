@@ -28,6 +28,17 @@ All notable changes to this project will be documented in this file.
 
 
 
+
+## [2.13.1] - 2026-08-13
+
+### Features
+
+- **Explain the new Asset organization options in Dashboard What's New** — The latest announcement now covers folder browsing, the flat All assets view, All scopes, category filters, Grid/List layouts, and thumbnail sizes in every supported Dashboard language.
+
+### Bug Fixes
+
+- **Remove outdated June announcements** — Dashboard What's New no longer lists the older June entries, keeping the release feed focused on current guidance.
+
 ## [2.13.0] - 2026-08-13
 
 ### Features
