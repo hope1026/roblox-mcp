@@ -12,7 +12,7 @@ description: Use when creating, importing, reviewing, uploading, updating, or re
 3. Read `references/creator-store.md` before searching, inspecting, or inserting a Creator Store asset.
 4. Read `references/generated-assets.md` when an AI image file or Roblox GenerationService model is involved.
 5. Read `references/studio-upload.md` before any Studio-local upload or temporary embedded-resource upload.
-6. Read `references/open-cloud-upload.md` before credential checks, Open Cloud upload or update, and operation polling.
+6. Read `references/open-cloud-upload.md` before credential checks, Open Cloud upload, existing asset linking, update, and operation polling.
 7. Ask for explicit approval whenever the workflow can create billable or temporary Roblox assets.
 8. Verify the returned local asset ID, Roblox asset ID or URI, operation status, and intended Creator before using the result.
 
