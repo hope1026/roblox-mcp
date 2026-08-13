@@ -50,6 +50,7 @@
         "manage_open_cloud_assets.credential_status",
         "manage_open_cloud_assets.capabilities",
         "manage_open_cloud_assets.upload",
+        "manage_open_cloud_assets.link",
         "manage_open_cloud_assets.update",
         "manage_open_cloud_assets.info",
         "manage_open_cloud_assets.operation_status"

@@ -2396,7 +2396,7 @@ generate or replace thumbnail.png for an Asset Library .rbxm asset.
 
 ## Tool: `manage_open_cloud_assets`
 
-[PRO] Roblox Open Cloud asset upload: preflight diagnostics, credential status, category capabilities, upload local files, update assets, read metadata, and poll operation status. Does not expose delete/archive/restore actions.
+[PRO] Roblox Open Cloud asset upload: preflight diagnostics, credential status, category capabilities, Asset Library-backed upload, existing asset linking, updates, metadata reads, and operation polling. Does not expose delete/archive/restore actions.
 
 ### `manage_open_cloud_assets.preflight`
 
@@ -2408,8 +2408,8 @@ diagnose credential, Assets Read/Write permissions, Creator target, category, an
 - Param aliases: none
 - Required params: none
 - Optional params:
-  - `filePath` - string - Local file path on the MCP server machine. Used by: upload, update.
-  - `category` - "image" | "decal" | "audio" | "mesh" | "model" | "video" | "animation" - WEPPY asset category. Used by: upload, update.
+  - `filePath` - string - Local file path on the MCP server machine. Used by: upload, link, update.
+  - `category` - "image" | "decal" | "audio" | "mesh" | "model" | "video" | "animation" - WEPPY asset category. Used by: upload, link, update. The link action does not support decal because it requires the backing Image asset ID.
   - `creatorType` - "user" | "group" - Asset creator owner type. Used by: upload, update. Defaults to saved credential metadata when available.
   - `creatorId` - string - User ID or group ID for the asset creator. Used by: upload, update. Defaults to saved credential metadata when available.
 
@@ -2444,20 +2444,43 @@ upload a local file as a new Roblox asset through Open Cloud.
 - Execution mode: `mutating`
 - Param aliases: none
 - Required params:
-  - `filePath` - string - Local file path on the MCP server machine. Used by: upload, update.
-  - `category` - "image" | "decal" | "audio" | "mesh" | "model" | "video" | "animation" - WEPPY asset category. Used by: upload, update.
-  - `displayName` - string - Roblox asset display name. Used by: upload, update.
+  - `filePath` - string - Local file path on the MCP server machine. Used by: upload, link, update.
+  - `category` - "image" | "decal" | "audio" | "mesh" | "model" | "video" | "animation" - WEPPY asset category. Used by: upload, link, update. The link action does not support decal because it requires the backing Image asset ID.
+  - `displayName` - string - Roblox asset display name. Used by: upload, link, update.
 - Optional params:
   - `contextId` - string - Optional execution context identifier. Used to continue an existing context for mutating actions.
   - `contextSummary` - ExecutionContextSummary - Optional structured execution context attached to this tool call.
   - `replayMetadata` - ExecutionReplayMetadata - Optional replay-ready metadata attached to this tool call.
-  - `description` - string - Roblox asset description. Used by: upload, update.
+  - `scope` - "place" | "shared" - Asset Library scope. Used by: upload, link. Defaults to place.
+  - `placeId` - number - Asset Library Place ID. Used by: upload, link when scope is place. Defaults to the current runtime Place ID.
+  - `description` - string - Roblox asset description. Used by: upload, link, update.
   - `creatorType` - "user" | "group" - Asset creator owner type. Used by: upload, update. Defaults to saved credential metadata when available.
   - `creatorId` - string - User ID or group ID for the asset creator. Used by: upload, update. Defaults to saved credential metadata when available.
   - `expectedPrice` - number - Expected upload fee in Robux. Used by: upload, update when Roblox requires an expected price.
   - `waitForOperation` - boolean - When true, poll the returned Open Cloud operation until done or timeout. Used by: upload, update.
   - `operationPollTimeoutMs` - number - Maximum operation polling time in milliseconds. Used by: upload, update when waitForOperation is true.
   - `operationPollIntervalMs` - number - Operation polling interval in milliseconds. Used by: upload, update when waitForOperation is true.
+
+### `manage_open_cloud_assets.link`
+
+link an existing non-Decal Roblox asset ID and local source file to the Asset Library without creating another Roblox asset.
+
+- Tier: `pro`
+- Route: `internal`
+- Execution mode: `mutating`
+- Param aliases: none
+- Required params:
+  - `assetId` - string - Roblox asset ID. Used by: link (required), update (required), info (required).
+  - `filePath` - string - Local file path on the MCP server machine. Used by: upload, link, update.
+  - `category` - "image" | "decal" | "audio" | "mesh" | "model" | "video" | "animation" - WEPPY asset category. Used by: upload, link, update. The link action does not support decal because it requires the backing Image asset ID.
+- Optional params:
+  - `contextId` - string - Optional execution context identifier. Used to continue an existing context for mutating actions.
+  - `contextSummary` - ExecutionContextSummary - Optional structured execution context attached to this tool call.
+  - `replayMetadata` - ExecutionReplayMetadata - Optional replay-ready metadata attached to this tool call.
+  - `scope` - "place" | "shared" - Asset Library scope. Used by: upload, link. Defaults to place.
+  - `placeId` - number - Asset Library Place ID. Used by: upload, link when scope is place. Defaults to the current runtime Place ID.
+  - `displayName` - string - Roblox asset display name. Used by: upload, link, update.
+  - `description` - string - Roblox asset description. Used by: upload, link, update.
 
 ### `manage_open_cloud_assets.update`
 
@@ -2468,15 +2491,15 @@ update an existing Roblox asset through Open Cloud.
 - Execution mode: `mutating`
 - Param aliases: none
 - Required params:
-  - `assetId` - string - Roblox asset ID. Used by: update (required), info (required).
-  - `category` - "image" | "decal" | "audio" | "mesh" | "model" | "video" | "animation" - WEPPY asset category. Used by: upload, update.
+  - `assetId` - string - Roblox asset ID. Used by: link (required), update (required), info (required).
+  - `category` - "image" | "decal" | "audio" | "mesh" | "model" | "video" | "animation" - WEPPY asset category. Used by: upload, link, update. The link action does not support decal because it requires the backing Image asset ID.
 - Optional params:
   - `contextId` - string - Optional execution context identifier. Used to continue an existing context for mutating actions.
   - `contextSummary` - ExecutionContextSummary - Optional structured execution context attached to this tool call.
   - `replayMetadata` - ExecutionReplayMetadata - Optional replay-ready metadata attached to this tool call.
-  - `filePath` - string - Local file path on the MCP server machine. Used by: upload, update.
-  - `displayName` - string - Roblox asset display name. Used by: upload, update.
-  - `description` - string - Roblox asset description. Used by: upload, update.
+  - `filePath` - string - Local file path on the MCP server machine. Used by: upload, link, update.
+  - `displayName` - string - Roblox asset display name. Used by: upload, link, update.
+  - `description` - string - Roblox asset description. Used by: upload, link, update.
   - `creatorType` - "user" | "group" - Asset creator owner type. Used by: upload, update. Defaults to saved credential metadata when available.
   - `creatorId` - string - User ID or group ID for the asset creator. Used by: upload, update. Defaults to saved credential metadata when available.
   - `expectedPrice` - number - Expected upload fee in Robux. Used by: upload, update when Roblox requires an expected price.
@@ -2494,7 +2517,7 @@ read Roblox asset metadata through Open Cloud.
 - Execution mode: `readonly`
 - Param aliases: none
 - Required params:
-  - `assetId` - string - Roblox asset ID. Used by: update (required), info (required).
+  - `assetId` - string - Roblox asset ID. Used by: link (required), update (required), info (required).
 - Optional params:
   - `readMask` - array<string> - Asset metadata fields to retrieve. Used by: info.
 

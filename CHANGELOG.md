@@ -26,6 +26,24 @@ All notable changes to this project will be documented in this file.
 
 
 
+
+## [2.12.4] - 2026-08-13
+
+### Features
+
+- **Keep Open Cloud uploads in the Asset Library** — Uploading an image, audio file, model, or video through Open Cloud now creates or reuses the matching shared or Place asset record automatically. Existing non-Decal Roblox assets can also be linked to a local file without uploading them again, and repeated requests return the same library item.
+
+### Bug Fixes
+
+- **Resume Project Sync after its WebSocket reconnects** — If the local MCP server restarts or the command connection drops while Sync is active, the Studio plugin now reconnects, cleans up the previous session, and starts a fresh full sync with the same one-time or continuous intent, direction settings, and preserved-file choices.
+- **Keep one stable folder for each Place during Sync** — Concurrent starts and Place ID promotion now use the same canonical folder. Duplicate folders are archived only after a successful full sync, so interrupted or failed syncs keep recoverable local data.
+- **Keep Project Change Summary writes reliable on Windows** — Concurrent history writes and cleanup now share one file-access queue, preventing transient Windows rename locks from losing a session or stopping later cleanup work.
+- **Reject unsafe Open Cloud library writes before local state changes** — Disabled uploads stop before creating a local library item, links require a verified matching Roblox asset type, and concurrent duplicate links converge on one item instead of producing duplicates.
+
+### Stability
+
+- **Safer local MCP restarts during Studio development** — The local stop script now targets only processes listening on the MCP ports, so an attached Roblox Studio client is not mistaken for the server.
+
 ## [2.12.3] - 2026-08-12
 
 ### Bug Fixes

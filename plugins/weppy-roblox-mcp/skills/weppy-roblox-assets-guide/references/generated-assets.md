@@ -1,6 +1,6 @@
 # Generated Assets Reference
 
-For AI-generated image files, save a supported local image first, then choose Studio-local or Open Cloud upload according to the requested owner and workflow.
+For AI-generated image files, save a supported local image first, then choose Studio-local or Open Cloud upload according to the requested owner and workflow. `manage_open_cloud_assets.upload` registers its stable local copy in the selected Asset Library scope. Use `manage_open_cloud_assets.link` instead when the image already has a Roblox asset ID.
 
 For Roblox model generation:
 
