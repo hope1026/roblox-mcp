@@ -27,6 +27,19 @@ All notable changes to this project will be documented in this file.
 
 
 
+
+## [2.13.0] - 2026-08-13
+
+### Features
+
+- **Browse Dashboard Assets by folder or as one searchable collection** — The Assets page now shows the folders created in your asset library, with breadcrumbs for nested navigation. Switch to **All assets** whenever you need one flat list across the selected category and scope, including **All scopes** for the current Place and shared assets together. Existing category filters remain unchanged.
+- **Choose the asset view that fits your workflow** — Keep the familiar Grid or List layout and choose Small, Medium, or Large thumbnails independently. Your organization and view preferences are remembered when you return to the Assets page.
+
+### Bug Fixes
+
+- **Keep the Assets toolbar in one place while changing scopes** — Rescan, settings, scope context, and category filters now stay aligned when switching between All scopes, Current Place, and Shared assets, even when one result set needs a scrollbar.
+- **Keep folder navigation usable in narrow Dashboard windows** — Folder navigation now preserves focus and avoids horizontal overflow on smaller screens.
+
 ## [2.12.4] - 2026-08-13
 
 ### Features
