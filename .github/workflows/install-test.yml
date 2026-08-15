@@ -228,6 +228,9 @@ jobs:
           console.log('✓ Public repo WEPPY Roblox AI Toolkit layout verified');
           NODE
 
+      - name: Verify — public installer links
+        run: node .github/scripts/check-public-links.mjs
+
       - name: Verify — published npm package runtime tarball shape
         run: |
           npm pack --dry-run --json @weppy/roblox-mcp@latest > npm-pack-published.json
