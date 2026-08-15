@@ -29,6 +29,13 @@ All notable changes to this project will be documented in this file.
 
 
 
+
+## [2.13.2] - 2026-08-15
+
+### Bug Fixes
+
+- **Keep license status checks from crashing when Studio disconnects** — If the MCP connection closed while the Studio plugin was retrying a license status request, Studio could log `LicenseManager:134 attempt to index nil with 'request'`. The plugin now stops the retry and reports the disconnected state instead. No settings or license changes are required.
+
 ## [2.13.1] - 2026-08-13
 
 ### Features
