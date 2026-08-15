@@ -65,6 +65,11 @@
       "skill": "weppy-roblox-mcp-guide",
       "reference": "references/playtest.md",
       "actions": [
+        "manage_studio.test_profile_get",
+        "manage_studio.test_profile_set",
+        "manage_studio.test_profile_reset",
+        "manage_studio.experience_language_get",
+        "manage_studio.experience_language_set",
         "manage_studio.play_start",
         "manage_studio.play_stop",
         "manage_studio.play_pause",

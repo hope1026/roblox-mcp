@@ -1729,4 +1729,4 @@ printf "  3. Click Connect and start building with AI!\n\n"
 printf "  Auto registration: Claude Code, Claude Desktop, Cursor, Codex CLI/App, Gemini CLI, Antigravity / Antigravity IDE, Antigravity CLI\n\n"
 printf "  WEPPY AI Agent Plugin: Claude Code installs automatically; Antigravity installs only when Antigravity CLI is available; Codex installs from Plugin Directory after marketplace add.\n\n"
 # shellcheck disable=SC2059
-printf "  ${DIM}Docs: https://weppyai.com/en/install/${NC}\n\n"
+printf "  ${DIM}Docs: https://weppyai.com/en/install${NC}\n\n"

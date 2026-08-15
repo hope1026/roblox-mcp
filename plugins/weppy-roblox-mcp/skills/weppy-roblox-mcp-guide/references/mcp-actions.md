@@ -2891,6 +2891,68 @@ Control Roblox Studio state for playtest lifecycle, automated test runs, and edi
   - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
   - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.
 
+### `manage_studio.test_profile_get`
+
+- Tier: `pro`
+- Route: `plugin`
+- Execution mode: `readonly`
+- Param aliases: none
+- Required params: none
+- Optional params:
+  - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
+  - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
+  - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.
+
+### `manage_studio.test_profile_set`
+
+- Tier: `pro`
+- Route: `plugin`
+- Execution mode: `unspecified`
+- Param aliases: none
+- Required params:
+  - `testProfile` - StudioTestProfile - Optional Player Emulator test profile patch. Used by: test_profile_set, play_start, run_test.
+- Optional params:
+  - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
+  - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
+  - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.
+
+### `manage_studio.test_profile_reset`
+
+- Tier: `pro`
+- Route: `plugin`
+- Execution mode: `unspecified`
+- Param aliases: none
+- Required params: none
+- Optional params:
+  - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
+  - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
+  - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.
+
+### `manage_studio.experience_language_get`
+
+- Tier: `pro`
+- Route: `plugin`
+- Execution mode: `readonly`
+- Param aliases: none
+- Required params: none
+- Optional params:
+  - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
+  - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
+  - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.
+
+### `manage_studio.experience_language_set`
+
+- Tier: `pro`
+- Route: `internal`
+- Execution mode: `unspecified`
+- Param aliases: none
+- Required params:
+  - `locale` - string - Normalized locale identifier requested for the active Experience Language. Used by: experience_language_set.
+- Optional params:
+  - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
+  - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
+  - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.
+
 ### `manage_studio.play_start`
 
 - Tier: `pro`
@@ -2900,6 +2962,8 @@ Control Roblox Studio state for playtest lifecycle, automated test runs, and edi
 - Required params: none
 - Optional params:
   - `mode` - "play" | "run" - Playtest mode. "play" = Play mode (F5, default), "run" = Run mode (F8). Used by: play_start, run_test.
+  - `testProfile` - StudioTestProfile - Optional Player Emulator test profile patch. Used by: test_profile_set, play_start, run_test.
+  - `restoreAfterTest` - boolean - Restore the profile snapshot after the play session or automated test finishes. Defaults to true when testProfile is provided. Used by: play_start, run_test.
   - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
   - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
   - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.
@@ -2964,6 +3028,8 @@ Control Roblox Studio state for playtest lifecycle, automated test runs, and edi
   - `mode` - "play" | "run" - Playtest mode. "play" = Play mode (F5, default), "run" = Run mode (F8). Used by: play_start, run_test.
   - `test_name` - string - Optional report display name for the automated playtest run. Used by: run_test.
   - `timeout` - number - Timeout in seconds for the automated playtest run. Default: 60. Maximum: 300. Used by: run_test.
+  - `testProfile` - StudioTestProfile - Optional Player Emulator test profile patch. Used by: test_profile_set, play_start, run_test.
+  - `restoreAfterTest` - boolean - Restore the profile snapshot after the play session or automated test finishes. Defaults to true when testProfile is provided. Used by: play_start, run_test.
   - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
   - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
   - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.
