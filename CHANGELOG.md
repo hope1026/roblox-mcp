@@ -31,6 +31,13 @@ All notable changes to this project will be documented in this file.
 
 
 
+
+## [2.13.4] - 2026-08-16
+
+### Stability
+
+- **Make connection-drop reports easier to diagnose** — Dashboard bug reports now include local, size-limited connection diagnostics that show whether the MCP server restarted or only the Roblox Studio Plugin reconnected. Sensitive free-form values and local paths are removed before these events are saved, and nothing is uploaded automatically. Update both the MCP server and Studio Plugin before reproducing an issue so the new `diagnostics.zip` contains both sides of the connection timeline.
+
 ## [2.13.3] - 2026-08-16
 
 ### Bug Fixes
