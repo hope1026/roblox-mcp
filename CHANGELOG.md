@@ -30,6 +30,16 @@ All notable changes to this project will be documented in this file.
 
 
 
+
+## [2.13.3] - 2026-08-16
+
+### Bug Fixes
+
+- **Protect local work before Full Sync starts** — WEPPY now checks files changed since the last Sync before replacing anything. Local-to-Studio work is preserved, Studio-to-local files can be refreshed from Studio, and two-way changes require an explicit choice. If those files change again after review, Full Sync stops and asks you to review the current state instead of using a stale decision.
+- **Keep AI edits out of an active Full Sync** — Script writes and other mutating requests now ask the AI to retry after Full Sync finishes instead of changing Studio or local files mid-sync. In a local-to-Studio workflow, a failed or unsupported local write no longer falls back to changing Studio directly.
+- **Ignore files that disappear only temporarily** — A file or folder that vanishes and returns before Sync processes the change is checked again, preventing a temporary filesystem event from becoming a Studio deletion.
+- **Restore Auto Delete to the selected policy** — When Auto Delete and the matching category Apply Mode are both set to Auto, deletions apply automatically without an extra batch-size or root-path exception. Auto Delete Off and Manual category settings still send deletions for review. No settings migration is required.
+
 ## [2.13.2] - 2026-08-15
 
 ### Bug Fixes
