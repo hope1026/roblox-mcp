@@ -33,6 +33,8 @@ Telemetry can include:
 - Locale and timezone
 - MCP server version
 - License tier label
+- Whether Sync reached its ready state
+- Sync category and active direction (`forward`, `reverse`, or `bidirectional`)
 - Approximate region derived by Google Analytics
 - Pseudonymous random device ID used to recognize repeat usage from the same local installation
 - A SHA-256-derived device observation key for server-side aggregate counting
