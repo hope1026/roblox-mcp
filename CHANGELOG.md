@@ -32,6 +32,13 @@ All notable changes to this project will be documented in this file.
 
 
 
+
+## [2.13.5] - 2026-08-17
+
+### Bug Fixes
+
+- **Apply Local Full Sync choices back to Studio** — When you choose Local for changed files during Full Sync, WEPPY now creates any missing parent folders and applies the preserved scripts and instances to Studio before reporting completion. Only changes that applied successfully are marked as synchronized, so failed or partial updates are no longer silently treated as complete. This works for both continuous and one-time Sync, with no settings change required.
+
 ## [2.13.4] - 2026-08-16
 
 ### Stability
