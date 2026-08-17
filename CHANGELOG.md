@@ -33,6 +33,13 @@ All notable changes to this project will be documented in this file.
 
 
 
+
+## [2.13.6] - 2026-08-18
+
+### Features
+
+- **Measure Sync adoption without collecting project content** — With telemetry enabled, WEPPY now records whether Sync reaches its ready state and whether each Sync category is set to Studio-to-local, local-to-Studio, or bidirectional. It does not send project names, Place IDs, file paths, script source, apply results, failure rates, or change counts. Existing telemetry opt-out settings continue to apply, and no setup change is required.
+
 ## [2.13.5] - 2026-08-17
 
 ### Bug Fixes
