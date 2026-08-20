@@ -200,7 +200,10 @@ const configPath = process.env.MCP_CONFIG_PATH;
 let config = {};
 const exists = fs.existsSync(configPath);
 if (exists) {
-  config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+  const content = fs.readFileSync(configPath, 'utf8').trim();
+  if (content.length > 0) {
+    config = JSON.parse(content);
+  }
 }
 if (!config || typeof config !== 'object' || Array.isArray(config)) {
   throw new Error('Antigravity config must be an object');
@@ -237,7 +240,14 @@ function Test-AntigravityMcpConfigured($configPath) {
     }
 
     try {
-        $config = Get-Content -Path $configPath -Raw | ConvertFrom-Json
+        $content = Get-Content -Path $configPath -Raw
+        if ([string]::IsNullOrWhiteSpace($content)) {
+            return $false
+        }
+        $config = $content | ConvertFrom-Json
+        if ($null -eq $config) {
+            return $false
+        }
         $hasLegacyFlatKey = $config.PSObject.Properties.Name -contains 'weppy-roblox-mcp'
         $server = $config.mcpServers.'weppy-roblox-mcp'
         # Accept args[1] as the weppy package regardless of whether a version tag is appended.
@@ -326,7 +336,9 @@ const canonicalEntry = { command: 'npx', args: ['-y', '@weppy/roblox-mcp@latest'
 
 function readConfig(configPath) {
   if (!fs.existsSync(configPath)) return { config: {}, exists: false };
-  const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+  const raw = fs.readFileSync(configPath, 'utf8');
+  if (raw.trim().length === 0) return { config: {}, exists: true };
+  const config = JSON.parse(raw);
   if (!config || typeof config !== 'object' || Array.isArray(config)) {
     throw new Error('Antigravity config must be an object');
   }
@@ -974,7 +986,13 @@ function Add-McpToConfig($configPath) {
 const fs = require('fs');
 const configPath = process.env.MCP_CONFIG_PATH;
 let config = {};
-try { config = JSON.parse(fs.readFileSync(configPath, 'utf8')); } catch {}
+try {
+  const content = fs.readFileSync(configPath, 'utf8').trim();
+  if (content.length > 0) {
+    config = JSON.parse(content);
+  }
+} catch {}
+if (!config || typeof config !== 'object' || Array.isArray(config)) config = {};
 if (!config.mcpServers) config.mcpServers = {};
 config.mcpServers['weppy-roblox-mcp'] = { command: 'npx', args: ['-y', '@weppy/roblox-mcp@latest'] };
 fs.writeFileSync(configPath, JSON.stringify(config, null, 2) + '\n');
@@ -1132,8 +1150,15 @@ function Remove-WeppyAntigravityMcpEntry($configPath) {
 const fs = require('fs');
 const path = require('path');
 const configPath = process.env.MCP_CONFIG_PATH;
-const source = fs.readFileSync(configPath, 'utf8');
-const config = JSON.parse(source);
+let source = '';
+try { source = fs.readFileSync(configPath, 'utf8'); } catch { process.exit(0); }
+if (source.trim().length === 0) process.exit(0);
+let config;
+try {
+  config = JSON.parse(source);
+} catch {
+  process.exit(0);
+}
 if (!config || typeof config !== 'object' || Array.isArray(config)) {
   throw new Error('Antigravity config must be an object');
 }
