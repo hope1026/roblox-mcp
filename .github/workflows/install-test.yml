@@ -400,7 +400,10 @@ jobs:
             printf '#!/usr/bin/env bash\nexit 0\n' > "$fixture_bin/npx"
             chmod +x "$fixture_bin/npx"
 
-            if [ "$fixture_mode" != "cli-missing" ] && [ "$fixture_mode" != "unrecoverable" ]; then
+            if [ "$fixture_mode" != "cli-missing" ] \
+              && [ "$fixture_mode" != "cli-missing-empty" ] \
+              && [ "$fixture_mode" != "cli-missing-whitespace" ] \
+              && [ "$fixture_mode" != "unrecoverable" ]; then
               cp /usr/local/bin/agy "$fixture_bin/agy"
               chmod +x "$fixture_bin/agy"
             fi
@@ -421,6 +424,14 @@ jobs:
                 seed_native_plugin "$target"
                 printf 'preserve-me\n' > "$target/rollback-marker"
                 ;;
+              cli-missing-empty)
+                mkdir -p "$fixture_home/.gemini/config"
+                : > "$fixture_home/.gemini/config/mcp_config.json"
+                ;;
+              cli-missing-whitespace)
+                mkdir -p "$fixture_home/.gemini/config"
+                printf '  \n\t' > "$fixture_home/.gemini/config/mcp_config.json"
+                ;;
               unrecoverable)
                 mkdir -p "$fixture_home/.gemini"
                 printf 'blocked\n' > "$fixture_home/.gemini/config"
@@ -430,7 +441,7 @@ jobs:
             set +e
             if [ "$fixture_mode" = "install-failure" ]; then
               HOME="$fixture_home" PATH="$fixture_bin:/usr/bin:/bin" CI=true WEPPY_ANTIGRAVITY_IDE_PRESENT=0 WEPPY_AGY_FAIL=1 WEPPY_ANTIGRAVITY_PLUGIN_SOURCE="$plugin_source" bash install.sh > "$log" 2>&1
-            elif [ "$fixture_mode" = "cli-missing" ] || [ "$fixture_mode" = "unrecoverable" ]; then
+            elif [[ "$fixture_mode" == cli-missing* ]] || [ "$fixture_mode" = "unrecoverable" ]; then
               HOME="$fixture_home" PATH="$fixture_bin:/usr/bin:/bin" CI=true WEPPY_ANTIGRAVITY_IDE_PRESENT=1 WEPPY_ANTIGRAVITY_PLUGIN_SOURCE="$plugin_source" bash install.sh > "$log" 2>&1
             else
               HOME="$fixture_home" PATH="$fixture_bin:/usr/bin:/bin" CI=true WEPPY_ANTIGRAVITY_IDE_PRESENT=0 WEPPY_ANTIGRAVITY_PLUGIN_SOURCE="$plugin_source" bash install.sh > "$log" 2>&1
@@ -466,7 +477,7 @@ jobs:
           const nativeMcp = path.join(cli, 'mcp_config.json');
           const count = Number(Boolean(shared.mcpServers?.['weppy-roblox-mcp'])) + Number(fs.existsSync(nativeMcp));
           if (count !== 1) throw new Error(`expected one WEPPY MCP definition, found ${count}`);
-          if (mode === 'cli-missing') {
+          if (mode.startsWith('cli-missing')) {
             if (fs.existsSync(cli)) throw new Error('CLI-missing fixture unexpectedly installed a plugin');
           } else {
             for (const skill of ['weppy-roblox-mcp-guide', 'weppy-roblox-sync-guide', 'weppy-roblox-assets-guide']) {
@@ -485,6 +496,8 @@ jobs:
           run_antigravity_fixture 'Antigravity outdated update' 'updated:' outdated
           run_antigravity_fixture 'Antigravity damaged repair' 'repaired:' damaged
           run_antigravity_fixture 'Antigravity CLI missing fallback' 'fallback:' cli-missing
+          run_antigravity_fixture 'Antigravity empty shared config fallback' 'fallback:' cli-missing-empty
+          run_antigravity_fixture 'Antigravity whitespace shared config fallback' 'fallback:' cli-missing-whitespace
           run_antigravity_fixture 'Antigravity install failure rollback' 'fallback:' install-failure
           run_antigravity_fixture 'Antigravity unrecoverable failure' 'failed:' unrecoverable
 
@@ -834,7 +847,7 @@ jobs:
             New-Item -ItemType Directory -Path $fixtureBin -Force | Out-Null
             Set-Content (Join-Path $fixtureBin 'npm.cmd') "@echo off`r`nexit /b 0" -Encoding ASCII
             Set-Content (Join-Path $fixtureBin 'npx.cmd') "@echo off`r`nexit /b 0" -Encoding ASCII
-            if ($Mode -notin @('cli-missing', 'unrecoverable')) {
+            if ($Mode -notin @('cli-missing', 'cli-missing-empty', 'cli-missing-whitespace', 'unrecoverable')) {
               Copy-Item $agyStub (Join-Path $fixtureBin 'agy.cmd') -Force
             }
 
@@ -856,6 +869,16 @@ jobs:
               'install-failure' {
                 Copy-NativePlugin $target
                 Set-Content (Join-Path $target 'rollback-marker') 'preserve-me' -Encoding UTF8
+              }
+              'cli-missing-empty' {
+                $sharedDir = Join-Path $fixtureHome '.gemini\config'
+                New-Item -ItemType Directory -Path $sharedDir -Force | Out-Null
+                [System.IO.File]::WriteAllText((Join-Path $sharedDir 'mcp_config.json'), '')
+              }
+              'cli-missing-whitespace' {
+                $sharedDir = Join-Path $fixtureHome '.gemini\config'
+                New-Item -ItemType Directory -Path $sharedDir -Force | Out-Null
+                [System.IO.File]::WriteAllText((Join-Path $sharedDir 'mcp_config.json'), "  `r`n`t")
               }
               'unrecoverable' {
                 $geminiDir = Join-Path $fixtureHome '.gemini'
@@ -879,7 +902,7 @@ jobs:
               $env:LOCALAPPDATA = Join-Path $fixtureHome 'AppData\Local'
               $env:PATH = "$fixtureBin;$basePath"
               $env:CI = 'true'
-              $env:WEPPY_ANTIGRAVITY_IDE_PRESENT = if ($Mode -in @('cli-missing', 'unrecoverable')) { '1' } else { '0' }
+              $env:WEPPY_ANTIGRAVITY_IDE_PRESENT = if ($Mode -like 'cli-missing*' -or $Mode -eq 'unrecoverable') { '1' } else { '0' }
               $env:WEPPY_AGY_FAIL = if ($Mode -eq 'install-failure') { '1' } else { $null }
               & $pwshPath -NoProfile -ExecutionPolicy Bypass -File "$env:GITHUB_WORKSPACE\install.ps1" *> $log
               $fixtureExit = $LASTEXITCODE
@@ -923,7 +946,7 @@ jobs:
             }
             $activeCount = $sharedCount + [int](Test-Path $nativeMcp)
             if ($activeCount -ne 1) { throw "$Name expected one WEPPY MCP definition, found $activeCount" }
-            if ($Mode -eq 'cli-missing') {
+            if ($Mode -like 'cli-missing*') {
               if (Test-Path $target) { throw "$Name unexpectedly installed a plugin" }
             }
             else {
@@ -946,6 +969,8 @@ jobs:
           Invoke-AntigravityFixture 'Antigravity outdated update' 'updated:' 'outdated'
           Invoke-AntigravityFixture 'Antigravity damaged repair' 'repaired:' 'damaged'
           Invoke-AntigravityFixture 'Antigravity CLI missing fallback' 'fallback:' 'cli-missing'
+          Invoke-AntigravityFixture 'Antigravity empty shared config fallback' 'fallback:' 'cli-missing-empty'
+          Invoke-AntigravityFixture 'Antigravity whitespace shared config fallback' 'fallback:' 'cli-missing-whitespace'
           Invoke-AntigravityFixture 'Antigravity install failure rollback' 'fallback:' 'install-failure'
           Invoke-AntigravityFixture 'Antigravity unrecoverable failure' 'failed:' 'unrecoverable'
 
