@@ -892,7 +892,7 @@ validate raw Luau source or an existing Script path without starting a playtest.
 
 ## Tool: `manage_ui`
 
-Create / update / verify Roblox in-game UI (ScreenGui / Frame / TextLabel / …). Always start a new UI task with the `design_brief` action — it accepts an omitted or partial brief, inspects Studio context, then returns a current-state summary, recommended mode/change scopes, candidate brief patches, and one user-facing confirmation or clarification question. design_brief may return asset recommendation candidates from existing UI images, user references, or conservative manage_assets.search results; do not use a recommended asset until the user accepts it. Do not dump enum lists at the user; map natural language to internal purpose/platform/tone values through recommendations, and only finalize identity-defining fields after the user accepts a recommendation or provides equivalent intent. Read MCP resource `weppy://ui-studio/guide` for the full guide; it is split into Floor (non-negotiable accessibility), Vocabulary (style menu — pick ONE family per dimension; do not blend everything), Direction (brief → choices), and Tree encoding (Roblox property JSON shapes). Floor essentials suggested by Design Check (`check`): (1) mobile touch target ≥ 44 px (2) text contrast ≥ 4.5:1 (3) prefer explicit `TextSize` over `TextScaled` (4) respect platform safe zones (5) warn on full-screen opaque roots for non-modal purposes. Style is brief-driven; reject the default AI look (uniform 8 px corners + generic blue + glass card + Gotham everywhere) — each game deserves its own visual identity.
+Create / update / verify Roblox in-game UI (ScreenGui / Frame / TextLabel / …). Always start with `design_brief`. For ambiguous input, it inspects Studio context and returns candidate brief patches; Do not dump enum lists at the user. Pass relevant repository evidence in `projectContext`; explicit screen job, visual thesis, forbidden defaults, tokens, and approved assets determine the direction without a built-in subject preset. `design_brief` returns a primary-view-first Design Contract and an advisory Layout Plan with neutral regions, AnchorPoint strategy, and responsive behavior; it is not a hard tree preset or style quota. A calling agent may declare provider-neutral image generation capability through `agentCapabilities`; missing or unavailable capability must use the explicit existing, user-provided, Creator Store, or assetless fallback. Keep the returned `brief_id`, `design_contract`, and `layout_plan` through creation, update, preview, and check. The asset recommendation gate considers user references, project assets, existing UI, and user-approved `manage_assets.search` intent; do not use a recommendation until the user accepts it. After each meaningful create or update, preview the representative primary view and submit a calling-agent critic verdict (`recompose`, `refine`, or `approved`) with `visualReview`. Read `primary_visual_verdict`, `functional_safe`, `responsive_requirement`, `responsive_ready`, `required_dimensions`, and `readiness` separately from mutation success. Responsive evidence blocks readiness only when the Design Contract marks it required. Read `weppy://ui-studio/guide` for the authoring workflow, `weppy://ui-studio/tokens` for optional visual examples, and `weppy://ui-studio/functional-rules` for machine-readable advisory evidence rules. Design Check permits `priority_high` only for observed functional visual failures such as meaningful overlap, unreadable content, invalid geometry, or primary-view occlusion; style-only findings remain medium or low.
 
 ### `manage_ui.design_brief`
 
@@ -903,6 +903,8 @@ Create / update / verify Roblox in-game UI (ScreenGui / Frame / TextLabel / …)
 - Required params: none
 - Optional params:
   - `brief` - object - 완성 또는 부분 design_brief 구조체. Used by: design_brief (optional; partial allowed).
+  - `projectContext` - object - Optional project-specific design evidence used by design_brief. Explicit user and experience evidence determines recommendations; WEPPY does not infer a subject preset.
+  - `agentCapabilities` - object - Optional provider-neutral capability declaration from the calling agent after it inspects callable tools and output channels. Do not infer these values from a model or client name. Used by: design_brief.
   - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
   - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
   - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.
@@ -914,9 +916,9 @@ Create / update / verify Roblox in-game UI (ScreenGui / Frame / TextLabel / …)
 - Execution mode: `unspecified`
 - Param aliases: none
 - Required params:
-  - `tree` - object - UI 트리 선언형 JSON. 루트는 ScreenGui. 스키마: {className: string, name?: string, parent?: string, properties?: {...}, children?: Tree[]} parent 생략 시 StarterGui. className은 Roblox GUI 계열(ScreenGui/Frame/TextLabel/TextButton/ImageLabel/ImageButton/ScrollingFrame/TextBox/UIListLayout/UIGridLayout/UIPadding/UICorner/UIStroke/UIAspectRatioConstraint/UIGradient/UITextSizeConstraint/UISizeConstraint) 한정. In-game UI 기본 구조(HUD / button / toast / card / 대부분의 menu): ScreenGui > Frame(BackgroundTransparency=1) > 실제 UI 요소. ScreenGui 직속 풀스크린 불투명 Frame 은 modal 용도에만 사용한다. Property 값 인코딩: UDim2는 {xScale, xOffset, yScale, yOffset}, UDim은 {scale, offset}, Color3는 {r, g, b}, Vector2/Vector3는 {x,y}/{x,y,z}, Enum은 item name string을 사용한다.
+  - `briefId` - string - design_brief 가 반환한 accepted brief 식별자. Used by: create_tree/update (required), preview/check (optional).
+  - `tree` - object - UI 트리 선언형 JSON. 루트는 ScreenGui. 스키마: {className: string, name?: string, parent?: string, properties?: {...}, children?: Tree[]} parent 생략 시 StarterGui. className은 Roblox GUI 계열(ScreenGui/Frame/TextLabel/TextButton/ImageLabel/ImageButton/ScrollingFrame/TextBox/UIListLayout/UIGridLayout/UIPadding/UICorner/UIStroke/UIAspectRatioConstraint/UIGradient/UITextSizeConstraint/UISizeConstraint/UIScale/UIFlexItem/UIShadow/UIPageLayout/UITableLayout/CanvasGroup/UIDragDetector) 한정. In-game UI 기본 구조(HUD / button / toast / card / 대부분의 menu): ScreenGui > Frame(BackgroundTransparency=1) > 실제 UI 요소. ScreenGui 직속 풀스크린 불투명 Frame 은 modal 용도에만 사용한다. Property 값 인코딩: UDim2는 {xScale, xOffset, yScale, yOffset}, UDim은 {scale, offset}, Color3는 {r, g, b}, Vector2/Vector3는 {x,y}/{x,y,z}, Enum은 item name string을 사용한다.
 - Optional params:
-  - `briefId` - string - design_brief 가 반환한 brief 식별자. Used by: create_tree, update, delete (optional).
   - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
   - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
   - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.
@@ -928,10 +930,10 @@ Create / update / verify Roblox in-game UI (ScreenGui / Frame / TextLabel / …)
 - Execution mode: `unspecified`
 - Param aliases: none
 - Required params:
+  - `briefId` - string - design_brief 가 반환한 accepted brief 식별자. Used by: create_tree/update (required), preview/check (optional).
   - `targetPath` - string - Path to existing UI instance. Both `StarterGui.MyGui` and `game.StarterGui.MyGui` are accepted. Used by: update, delete (required).
   - `changes` - object - 부분 변경 스펙. {properties?: {...}, addChildren?: Tree[], removeChildren?: [string]} properties는 `Instance:SetPropertyValue` 호환 키·값 쌍. 값 인코딩은 tree 설명의 Property 값 인코딩을 따른다.
 - Optional params:
-  - `briefId` - string - design_brief 가 반환한 brief 식별자. Used by: create_tree, update, delete (optional).
   - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
   - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
   - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.
@@ -958,7 +960,9 @@ Create / update / verify Roblox in-game UI (ScreenGui / Frame / TextLabel / …)
 - Required params: none
 - Optional params:
   - `targetPath` - string - Path to existing UI instance. Both `StarterGui.MyGui` and `game.StarterGui.MyGui` are accepted. Used by: update, delete (required).
-  - `briefId` - string - design_brief 가 반환한 brief 식별자. Used by: create_tree, update, delete (optional).
+  - `briefId` - string - design_brief 가 반환한 accepted brief 식별자. Used by: create_tree/update (required), preview/check (optional).
+  - `viewportMode` - "current" | "selected_profiles" - Viewport review mode. selected_profiles uses profileIds from the accepted Design Contract. Used by: preview, check.
+  - `profileIds` - array<string> - Selected Design Contract target profile IDs. Used by: preview, check.
   - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
   - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
   - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.
@@ -972,9 +976,10 @@ Create / update / verify Roblox in-game UI (ScreenGui / Frame / TextLabel / …)
 - Required params: none
 - Optional params:
   - `targetPath` - string - Path to existing UI instance. Both `StarterGui.MyGui` and `game.StarterGui.MyGui` are accepted. Used by: update, delete (required).
-  - `briefId` - string - design_brief 가 반환한 brief 식별자. Used by: create_tree, update, delete (optional).
-  - `includeVisualAnalysis` - boolean - Opt-in only. Used by: check. When true, the server may read a saved preview snapshot PNG + visible GUI metadata and merge AI visual suggestions into check_results. Default false; no screenshot capture is triggered by check.
-  - `snapshotId` - string - Saved manage_ui.preview snapshot_id to use for visual analysis. Used by: check when includeVisualAnalysis=true. If omitted, the latest compatible saved snapshot is used when available.
+  - `briefId` - string - design_brief 가 반환한 accepted brief 식별자. Used by: create_tree/update (required), preview/check (optional).
+  - `visualReview` - object - Optional provider-neutral visual review written by the calling agent after it inspects one saved manage_ui.preview screenshot. Findings are advisory only and never block UI changes. Used by: check.
+  - `viewportMode` - "current" | "selected_profiles" - Viewport review mode. selected_profiles uses profileIds from the accepted Design Contract. Used by: preview, check.
+  - `profileIds` - array<string> - Selected Design Contract target profile IDs. Used by: preview, check.
   - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
   - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
   - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.
