@@ -35,6 +35,13 @@ All notable changes to this project will be documented in this file.
 
 
 
+
+## [2.14.1] - 2026-08-21
+
+### Bug Fixes
+
+- **Complete one-line installs when an MCP config file is blank** — `install.sh` and `install.ps1` now treat empty or whitespace-only Antigravity shared config files as a fresh configuration, register WEPPY normally, and preserve valid existing settings. Malformed non-empty JSON still stops instead of being overwritten, and no manual file cleanup is required. Thanks to `@jaumnp` for reporting the issue.
+
 ## [2.14.0] - 2026-08-20
 
 ### Features

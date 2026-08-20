@@ -149,7 +149,10 @@ const configPath = process.env.MCP_CONFIG_PATH;
 let config = {};
 const exists = fs.existsSync(configPath);
 if (exists) {
-  config = JSON.parse(fs.readFileSync(configPath, "utf8"));
+  const raw = fs.readFileSync(configPath, "utf8");
+  if (raw.trim().length > 0) {
+    config = JSON.parse(raw);
+  }
 }
 if (!config || typeof config !== "object" || Array.isArray(config)) {
   throw new Error("Antigravity config must be an object");
@@ -1045,6 +1048,7 @@ const fs = require('fs');
 const path = require('path');
 const configPath = process.env.MCP_CONFIG_PATH;
 const source = fs.readFileSync(configPath, 'utf8');
+if (source.trim().length === 0) process.exit(0);
 const config = JSON.parse(source);
 
 if (!config || typeof config !== 'object' || Array.isArray(config)) {
@@ -1086,7 +1090,9 @@ const canonicalEntry = { command: 'npx', args: ['-y', '@weppy/roblox-mcp@latest'
 
 function readConfig(configPath) {
   if (!fs.existsSync(configPath)) return { config: {}, exists: false };
-  const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+  const raw = fs.readFileSync(configPath, 'utf8');
+  if (raw.trim().length === 0) return { config: {}, exists: true };
+  const config = JSON.parse(raw);
   if (!config || typeof config !== 'object' || Array.isArray(config)) {
     throw new Error('Antigravity config must be an object');
   }
