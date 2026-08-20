@@ -34,6 +34,19 @@ All notable changes to this project will be documented in this file.
 
 
 
+
+## [2.14.0] - 2026-08-20
+
+### Features
+
+- **Build and review UI as one guided workflow** — UI Studio now uses existing game screens and assets to plan a composition, checks the result in a representative view, and guides the AI to recompose, refine, or approve it. Gameplay overlays such as HUDs are reviewed with the gameplay view visible, and panel overlap that hides important content or actions is reported before the result is marked ready.
+- **Generate and apply UI artwork with image-capable agents** — With an agent such as Codex, you can create icons, backgrounds, and decorative artwork in the conversation, then continue through Asset Library storage, Roblox upload, and UI application without moving files or pasting asset IDs manually. Image generation and Roblox upload remain separate user-approved steps.
+- **See what remains before a UI is ready** — Dashboard UI Studio now separates visual quality, functional safety, and screen-size coverage. Responsive checks block readiness only when the UI task explicitly requires those screen sizes, while image-dependent designs remain in review until the required asset is ready.
+
+### Stability
+
+- **Run Canonical Spec validation on clean CI workers** — The repository contract tests now fetch the pinned Forge revision when no local checkout is configured, so release and develop validation no longer depends on a developer-specific filesystem path.
+
 ## [2.13.6] - 2026-08-18
 
 ### Features
