@@ -5,7 +5,7 @@
   },
   "metadata": {
     "description": "WEPPY AI Agent Plugin marketplace for Codex — MCP setup and workflow guidance for the WEPPY Roblox AI Toolkit",
-    "version": "2.14.1"
+    "version": "2.14.2"
   },
   "plugins": [
     {
@@ -20,7 +20,7 @@
       },
       "category": "Coding",
       "description": "WEPPY AI Agent Plugin for Codex.",
-      "version": "2.14.1"
+      "version": "2.14.2"
     }
   ]
 }

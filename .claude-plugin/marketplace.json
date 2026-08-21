@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "WEPPY AI Agent Plugin marketplace for Claude Code — MCP setup and workflow guidance for the WEPPY Roblox AI Toolkit",
-    "version": "2.14.1"
+    "version": "2.14.2"
   },
   "plugins": [
     {
       "name": "weppy-roblox-ai-toolkit",
       "source": "./plugins/weppy-roblox-mcp",
       "description": "WEPPY AI Agent Plugin for Claude Code — MCP setup and workflow guidance for the WEPPY Roblox AI Toolkit.",
-      "version": "2.14.1",
+      "version": "2.14.2",
       "author": {
         "name": "hope1026"
       },

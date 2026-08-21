@@ -36,6 +36,18 @@ All notable changes to this project will be documented in this file.
 
 
 
+
+## [2.14.2] - 2026-08-21
+
+### Features
+
+- **Get layout guidance that matches the job of each game screen** — UI Studio now uses roles such as HUD, menu, modal, and objective tracker to suggest clearer hierarchy, placement, and responsive behavior. AI agents can use the guidance while planning and reviewing a screen without changing existing UI assets automatically.
+
+### Bug Fixes
+
+- **Make UI Studio tools easier for MCP clients to load** — UI Studio action descriptions now use a consistent schema across the server and generated tool definitions, reducing registration and validation issues for clients that strictly inspect tool input schemas. No configuration change is required.
+- **Keep Sync idle when returning from Play mode** — The Studio Plugin no longer performs an unnecessary post-play reconciliation after Sync has already returned to an idle state, and changing the Dashboard sync root no longer restarts idle work unexpectedly.
+
 ## [2.14.1] - 2026-08-21
 
 ### Bug Fixes
