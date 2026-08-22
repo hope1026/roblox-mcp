@@ -1,0 +1,138 @@
+name: Publish npm Package
+run-name: Publish npm v${{ inputs.version }} (source ${{ inputs.source_run_id }})
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'SemVer without v prefix'
+        required: true
+        type: string
+      source_run_id:
+        description: 'Private Publish Release workflow run id'
+        required: true
+        type: string
+
+permissions: {}
+
+concurrency:
+  group: npm-publish-${{ inputs.version }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Publish @weppy/roblox-mcp
+    if: github.repository == 'hope1026/weppy-roblox-mcp' && github.ref == 'refs/heads/main'
+    environment: npm-publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout publisher
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Require npm Trusted Publishing CLI
+        run: |
+          npm install --global npm@11
+          NPM_VERSION=$(npm --version)
+          node - "$NPM_VERSION" <<'NODE'
+          const [major, minor, patch] = process.argv[2].split('.').map(Number);
+          if (major < 11 || (major === 11 && minor < 5) || (major === 11 && minor === 5 && patch < 1)) {
+            throw new Error(`npm 11.5.1 이상이 필요합니다. 현재 버전: ${major}.${minor}.${patch}`);
+          }
+          NODE
+          echo "$NPM_VERSION"
+
+      - name: Download exact Release asset
+        id: asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          ASSET="weppy-roblox-mcp-v${VERSION}.tgz"
+          mkdir -p "$RUNNER_TEMP/npm-release"
+          gh release download "v${VERSION}" \
+            --repo "$GITHUB_REPOSITORY" \
+            --pattern "$ASSET" \
+            --dir "$RUNNER_TEMP/npm-release"
+          TARBALL="$RUNNER_TEMP/npm-release/$ASSET"
+          test -f "$TARBALL"
+          echo "tarball=$TARBALL" >> "$GITHUB_OUTPUT"
+
+      - name: Validate tarball and registry state
+        id: validation
+        env:
+          TARBALL: ${{ steps.asset.outputs.tarball }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          REGISTRY_JSON="$RUNNER_TEMP/npm-registry.json"
+          REGISTRY_ERROR="$RUNNER_TEMP/npm-registry-error.log"
+          if npm view "@weppy/roblox-mcp@${VERSION}" dist.integrity --json > "$REGISTRY_JSON" 2> "$REGISTRY_ERROR"; then
+            REGISTRY_INTEGRITY=$(node -e "const fs=require('fs'); const value=JSON.parse(fs.readFileSync(process.argv[1], 'utf8')); process.stdout.write(value ?? '')" "$REGISTRY_JSON")
+            VALIDATION=$(node .github/scripts/validate-npm-release.mjs \
+              --tarball "$TARBALL" \
+              --version "$VERSION" \
+              --registry-integrity "$REGISTRY_INTEGRITY")
+          elif grep -q 'E404' "$REGISTRY_ERROR"; then
+            VALIDATION=$(node .github/scripts/validate-npm-release.mjs \
+              --tarball "$TARBALL" \
+              --version "$VERSION")
+          else
+            cat "$REGISTRY_ERROR" >&2
+            exit 1
+          fi
+
+          echo "$VALIDATION"
+          STATE=$(node -e "const value=JSON.parse(process.argv[1]); process.stdout.write(value.registryState)" "$VALIDATION")
+          INTEGRITY=$(node -e "const value=JSON.parse(process.argv[1]); process.stdout.write(value.integrity)" "$VALIDATION")
+          echo "state=$STATE" >> "$GITHUB_OUTPUT"
+          echo "integrity=$INTEGRITY" >> "$GITHUB_OUTPUT"
+
+      - name: Publish with npm Trusted Publishing OIDC
+        if: steps.validation.outputs.state == 'publish'
+        env:
+          TARBALL: ${{ steps.asset.outputs.tarball }}
+        run: npm publish "$TARBALL" --access public --provenance
+
+      - name: Verify published integrity
+        if: steps.validation.outputs.state == 'publish'
+        env:
+          EXPECTED_INTEGRITY: ${{ steps.validation.outputs.integrity }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          for attempt in $(seq 1 10); do
+            echo "Registry integrity verification attempt $attempt/10"
+            ACTUAL_INTEGRITY=$(npm view "@weppy/roblox-mcp@${VERSION}" dist.integrity --json 2>/dev/null | node -e "let input=''; process.stdin.on('data', chunk => input += chunk); process.stdin.on('end', () => process.stdout.write(JSON.parse(input) ?? ''))" || true)
+            if [ "$ACTUAL_INTEGRITY" = "$EXPECTED_INTEGRITY" ]; then
+              echo "Verified registry integrity for @weppy/roblox-mcp@${VERSION}"
+              exit 0
+            fi
+            sleep 6
+          done
+          echo "Registry integrity did not converge to the published tarball" >&2
+          exit 1
+
+      - name: Record successful no-op
+        if: steps.validation.outputs.state == 'noop'
+        env:
+          VERSION: ${{ inputs.version }}
+        run: echo "@weppy/roblox-mcp@${VERSION} is already published with the same integrity."
+
+      - name: Summarize npm publish
+        if: always()
+        env:
+          STATE: ${{ steps.validation.outputs.state }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          {
+            echo "## npm Trusted Publishing"
+            echo "- Version: \`$VERSION\`"
+            echo "- Result: \`${STATE:-failed}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
