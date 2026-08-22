@@ -39,6 +39,13 @@ All notable changes to this project will be documented in this file.
 
 
 
+
+## [2.14.5] - 2026-08-22
+
+### Stability
+
+- **Keep npm releases available without expiring publisher tokens** — npm packages are now published through a short-lived GitHub identity tied to the protected release workflow. If npm publishing needs to be retried, the release can reuse the exact verified package archive without rebuilding the Studio Plugin or other release files. No installation or configuration change is required.
+
 ## [2.14.4] - 2026-08-22
 
 ### Stability
