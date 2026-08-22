@@ -38,6 +38,13 @@ All notable changes to this project will be documented in this file.
 
 
 
+
+## [2.14.4] - 2026-08-22
+
+### Stability
+
+- **Recover completed AI commands after Studio reconnects** — The Studio Plugin now keeps each completed command result until the MCP Server confirms receipt, then resends only unconfirmed results after a connection interruption. Completed tool calls no longer appear lost when the connection drops at the end of a command, and reconnects can recover several large pending results without exceeding the handshake message limit. No configuration change is required.
+
 ## [2.14.3] - 2026-08-22
 
 ### Features
