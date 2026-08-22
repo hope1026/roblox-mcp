@@ -37,6 +37,13 @@ All notable changes to this project will be documented in this file.
 
 
 
+
+## [2.14.3] - 2026-08-22
+
+### Features
+
+- **Catch HUD controls that visually float away from their intended screen edge** — UI Studio now compares the actual visible buttons, labels, images, and outlines with each target profile's safe area, even when a transparent parent container is correctly anchored. Findings explain whether the container or its internal empty space caused the gap, while custom placements and AnchorPoint differences remain advisory unless the project sets an explicit edge-gap limit.
+
 ## [2.14.2] - 2026-08-21
 
 ### Features
