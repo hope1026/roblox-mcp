@@ -96,7 +96,7 @@
       "actions": [
         "manage_sync.status_current_place",
         "manage_sync.history",
-        "manage_sync.directions",
+        "manage_sync.policy",
         "manage_sync.read_file",
         "manage_sync.write_file",
         "manage_sync.progress"

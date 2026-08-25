@@ -2540,7 +2540,7 @@ read Open Cloud operation status for upload/update processing.
 
 ## Tool: `manage_sync`
 
-[PRO] Project sync management: status, history, direction settings, read/write synced files.
+[PRO] Project sync management: status, history, effective policy, and synced file access.
 
 ### `manage_sync.status_current_place`
 
@@ -2563,20 +2563,20 @@ get change history.
 - Param aliases: none
 - Required params: none
 - Optional params:
-  - `placeId` - number - Place ID for sync operations. Used by: history, directions, read_file, write_file.
+  - `placeId` - number - Place ID for sync operations. Used by: history, policy, read_file, write_file.
   - `query` - object - Query parameters for history. Used by: history.
 
-### `manage_sync.directions`
+### `manage_sync.policy`
 
-get per-type sync directions.
+get the effective version 2 sync policy and capabilities.
 
 - Tier: `pro`
 - Route: `internal`
-- Execution mode: `unspecified`
+- Execution mode: `readonly`
 - Param aliases: none
 - Required params: none
 - Optional params:
-  - `placeId` - number - Place ID for sync operations. Used by: history, directions, read_file, write_file.
+  - `placeId` - number - Place ID for sync operations. Used by: history, policy, read_file, write_file.
 
 ### `manage_sync.read_file`
 
@@ -2587,7 +2587,7 @@ read a synced file.
 - Execution mode: `unspecified`
 - Param aliases: none
 - Required params:
-  - `placeId` - number - Place ID for sync operations. Used by: history, directions, read_file, write_file.
+  - `placeId` - number - Place ID for sync operations. Used by: history, policy, read_file, write_file.
   - `instancePath` - string - Instance path for file read/write. Used by: read_file, write_file.
 - Optional params: none
 
@@ -2600,7 +2600,7 @@ write to a synced file.
 - Execution mode: `unspecified`
 - Param aliases: none
 - Required params:
-  - `placeId` - number - Place ID for sync operations. Used by: history, directions, read_file, write_file.
+  - `placeId` - number - Place ID for sync operations. Used by: history, policy, read_file, write_file.
   - `instancePath` - string - Instance path for file read/write. Used by: read_file, write_file.
   - `content` - string - File content to write. Used by: write_file.
 - Optional params: none
@@ -2802,6 +2802,33 @@ quick access to recent errors only.
   - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
   - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
   - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.
+
+## Tool: `manage_settings`
+
+WEPPY settings management. Read or change whether Dashboard opens automatically when the MCP Server starts.
+
+### `manage_settings.get_dashboard_auto_open`
+
+read the saved Dashboard auto-open preference.
+
+- Tier: `basic`
+- Route: `internal`
+- Execution mode: `readonly`
+- Param aliases: none
+- Required params: none
+- Optional params: none
+
+### `manage_settings.set_dashboard_auto_open`
+
+enable or disable Dashboard auto-open from the next MCP Server start.
+
+- Tier: `basic`
+- Route: `internal`
+- Execution mode: `mutating`
+- Param aliases: none
+- Required params:
+  - `enabled` - boolean - Whether Dashboard should open automatically when WEPPY MCP Server starts. Used by: set_dashboard_auto_open.
+- Optional params: none
 
 ## Tool: `system_info`
 
