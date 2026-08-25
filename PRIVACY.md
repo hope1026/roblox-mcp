@@ -34,12 +34,14 @@ Telemetry can include:
 - MCP server version
 - License tier label
 - Whether Sync reached its ready state
-- Sync category and active direction (`forward`, `reverse`, or `bidirectional`)
+- Sync semantic scope in `sync_scope` (`scriptSource`, `properties`, `structure`, or `serviceProperties`) and active direction in `sync_direction` (`forward`, `reverse`, or `bidirectional`)
 - Approximate region derived by Google Analytics
 - Pseudonymous random device ID used to recognize repeat usage from the same local installation
 - A SHA-256-derived device observation key for server-side aggregate counting
 
 Command categories describe which WEPPY feature was used. They do not include your prompt text, script source, file path, or Roblox object path. License tier labels do not include the raw license key.
+
+Sync telemetry records a semantic scope only when that scope's effective direction changes. Sync workflow preset and delete-safety settings are not collected.
 
 ## Data Not Collected
 

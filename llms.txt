@@ -22,6 +22,14 @@ terrain, and more — inside a live Studio session.
 - Roblox Explorer VSCode extension for browsing Studio hierarchy
 - Works with Claude Code, Claude Desktop, Cursor, Codex CLI, Codex App, Gemini CLI, Antigravity / Antigravity IDE / Antigravity CLI
 
+## Sync policy and safety
+
+Sync starts Off on first use. Start on connection is also Off. Saved settings always take precedence, including explicitly saved Off and false values. The default first-use workflow is Studio First, with Studio as the source for the initial synchronization.
+
+The plugin offers Studio First, Bidirectional Review, Local Code, Studio World, and Custom workflows. Custom uses four semantic scopes: Script Source, Properties, Structure, and Service Properties. Content Changes and Structure Changes application modes are separate from those scope directions. Local file deletion does not delete a Studio instance by default; applying it to Studio requires an additional opt-in and is separate from UI Studio history cleanup. The Dashboard reports the effective policy read-only, while the Studio plugin owns Sync start, stop, and policy editing.
+
+The WEPPY MCP Server and WEPPY Roblox Studio Plugin must come from the same release. Update both together, then restart Roblox Studio before reconnecting if their versions do not match.
+
 ## Luau syntax validation
 
 `manage_scripts.validate` checks either raw source or an existing Script path and
@@ -93,8 +101,8 @@ Antigravity:
 
 ## Tiers
 
-- Basic (Free): MCP tool execution + one-way Studio -> Local sync
-- Pro: Bidirectional sync, UI Studio, bulk actions, terrain generation, spatial analysis, multi-place support for up to 5 places, advanced tools
+- Basic (Free): MCP tool execution + Studio-to-local sync
+- Pro: Additional Sync workflows, UI Studio, bulk actions, terrain generation, spatial analysis, multi-place support for up to 5 places, advanced tools
 
 ## Detailed docs
 

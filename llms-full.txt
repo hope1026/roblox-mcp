@@ -4,6 +4,12 @@
 
 The web dashboard includes a Connection topology for multiple AI agents, the MCP server, and multiple connected Studio Targets, with copyable Studio IDs and routing status for multi-Studio workflows.
 
+Sync starts Off on first use. Start on connection is also Off. Saved settings always take precedence, including explicitly saved Off and false values. The default first-use workflow is Studio First, so Studio is the source for the initial synchronization. The Studio plugin owns Sync start, stop, and policy editing; the MCP server and Dashboard expose the effective policy read-only.
+
+The workflows are Studio First, Bidirectional Review, Local Code, Studio World, and Custom. Custom uses the Script Source, Properties, Structure, and Service Properties semantic scopes. Content Changes and Structure Changes application modes are separate from scope direction. Local file deletion does not delete a Studio instance by default; applying it to Studio is an additional opt-in and is separate from UI Studio history cleanup. Basic is limited to Studio-to-local Sync, while Pro can use the additional workflow directions allowed by the effective policy.
+
+The WEPPY MCP Server and WEPPY Roblox Studio Plugin must come from the same release. Update both together, then restart Roblox Studio before reconnecting if their versions do not match.
+
 `manage_scripts.validate` provides Basic syntax validation for raw Luau source or an existing Script path without starting Playtest. The Dashboard setting at **Controls → Luau Syntax Validation** defaults to Off and enforces whether successful `set_source`, `edit_replace`, `edit_insert`, and `edit_delete` calls validate the actual saved source. Conflicting tool values are ignored with a warning that points to the Dashboard setting. Automatic valid checks keep the normal write response unchanged; invalid or unavailable checks add details, while an explicit matching `validate=true` requests full valid details. Validation never rolls back an applied write.
 
 The first request that needs WASM downloads the exact `luau-parser-v1.0.0` companion release and caches it locally; a compatible local `luau-compile` is the fallback. Source is parsed on the user's computer and is not sent to a remote validation service. If no parser is available, validation reports an unavailable status without turning a successful write into a failure. It checks only whether the Luau source parses.

@@ -40,6 +40,25 @@ All notable changes to this project will be documented in this file.
 
 
 
+
+## [2.14.6] - 2026-08-25
+
+### ⚠️ BREAKING CHANGES
+
+- **Update the MCP Server and Studio Plugin together** — Sync now requires both components to use the same WEPPY release. A version mismatch blocks the connection and Sync instead of continuing with incompatible behavior. Update both components to v2.14.6, then restart Roblox Studio. This compatibility check does not delete or reset project files.
+- **Review only Sync settings that cannot be converted safely** — Existing Sync on/off and start-on-connection values are preserved, and most saved direction settings are converted automatically. If an older setup combines several directions and automatic apply options in a way that has no safe workflow equivalent, Sync pauses to prevent unintended changes. Open the Studio Plugin's Sync tab and choose a workflow once to continue; the migration itself does not delete project files.
+- **Move Dashboard auto-open control out of the environment** — `DASHBOARD_AUTO_OPEN` is no longer used. Dashboard auto-open is now a saved setting, enabled by default, and changes take effect the next time the MCP Server starts. Dashboard history and project data are unchanged.
+
+### Features
+
+- **Set up Sync by workflow instead of individual directions** — Choose Studio First, Bidirectional Review, or Local Code + Studio World to configure the relevant Sync scopes and apply behavior together. Custom remains available when scripts, properties, structure, or service properties need separate control, and each control now explains its scope and availability.
+- **Start new Sync setups with safer defaults** — First-time setups begin with Sync and start-on-connection turned off, using Studio First as the default workflow. Deleting a local file affects the matching Studio instance only after the separate safety setting is explicitly enabled.
+- **Control Dashboard auto-open from Settings or your Agent** — Turn automatic opening on or off from the Dashboard Settings page, or ask an AI Agent to change the same saved setting without connecting Roblox Studio.
+
+### Stability
+
+- **Keep Studio connected when recent-place metadata cannot be saved** — A local metadata write failure after Plugin registration is now reported without interrupting the connection.
+
 ## [2.14.5] - 2026-08-22
 
 ### Stability

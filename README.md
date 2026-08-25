@@ -138,8 +138,11 @@ WEPPY Assets turns a natural-language asset request into a Studio-ready result.
 
 AI works from a synchronized local mirror, so multi-file updates stay consistent.
 
-- Basic: one-way sync (Studio -> Local)
-- Pro: bidirectional sync + per-type Direction/Apply Mode + history + up to five Places
+- Sync starts Off on first use. Start on connection is also Off. Saved settings always take precedence, including a saved Off value. The first-use workflow is Studio First, so the first synchronization treats Studio as the source.
+- Choose Studio First, Bidirectional Review, Local Code, Studio World, or Custom. Custom groups changes into four semantic scopes: Script Source, Properties, Structure, and Service Properties.
+- Content Changes and Structure Changes application modes are shown separately from scope direction. Local file deletion does not delete a Studio instance by default; applying a deletion to Studio requires an additional opt-in and is separate from UI Studio history cleanup.
+- Basic uses Studio-to-local Sync. Pro adds the richer workflow directions, history, and support for up to five Places.
+- The WEPPY MCP Server and WEPPY Roblox Studio Plugin must come from the same release. Update both together, then restart Roblox Studio before reconnecting if their versions do not match.
 
 ![Sync workflow - Studio and local files synchronized in real time](https://raw.githubusercontent.com/hope1026/weppy-roblox-mcp/main/docs/assets/screenshots/plugin/sync/sync-overview.png)
 
