@@ -42,6 +42,13 @@ All notable changes to this project will be documented in this file.
 
 
 
+
+## [2.15.1] - 2026-08-27
+
+### Bug Fixes
+
+- **Show the new project root in the Dashboard header immediately** — After changing Project Root in Controls, the top header now updates as soon as the change succeeds instead of continuing to show the previous project until another refresh. No page reload is required.
+
 ## [2.15.0] - 2026-08-27
 
 ### Features
