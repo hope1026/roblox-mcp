@@ -1624,6 +1624,7 @@ enable or disable a ParticleEmitter, Beam, Trail, or other effect.
 - Optional params:
   - `cframe` - object - Position and rotation for fill shapes. Used by: fill_block, fill_cylinder, fill_wedge.
   - `size` - object - Size in studs. Used by: fill_block, fill_wedge.
+  - `material` - string - Terrain material name (e.g., Grass, Rock, Water, Sand, Slate, Concrete). Used by: fill_*, replace_material, colors_get, colors_set.
   - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
   - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
   - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.
@@ -1638,6 +1639,7 @@ enable or disable a ParticleEmitter, Beam, Trail, or other effect.
 - Optional params:
   - `center` - object - Center position as Vector3. Used by: fill_ball.
   - `radius` - number - Radius in studs. Used by: fill_ball, fill_cylinder.
+  - `material` - string - Terrain material name (e.g., Grass, Rock, Water, Sand, Slate, Concrete). Used by: fill_*, replace_material, colors_get, colors_set.
   - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
   - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
   - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.
@@ -1653,6 +1655,7 @@ enable or disable a ParticleEmitter, Beam, Trail, or other effect.
   - `cframe` - object - Position and rotation for fill shapes. Used by: fill_block, fill_cylinder, fill_wedge.
   - `radius` - number - Radius in studs. Used by: fill_ball, fill_cylinder.
   - `height` - number - Height in studs. Used by: fill_cylinder.
+  - `material` - string - Terrain material name (e.g., Grass, Rock, Water, Sand, Slate, Concrete). Used by: fill_*, replace_material, colors_get, colors_set.
   - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
   - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
   - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.
@@ -1669,6 +1672,7 @@ fill shapes with material. clear_region/clear_bounds: clear terrain. replace_mat
 - Optional params:
   - `cframe` - object - Position and rotation for fill shapes. Used by: fill_block, fill_cylinder, fill_wedge.
   - `size` - object - Size in studs. Used by: fill_block, fill_wedge.
+  - `material` - string - Terrain material name (e.g., Grass, Rock, Water, Sand, Slate, Concrete). Used by: fill_*, replace_material, colors_get, colors_set.
   - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
   - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
   - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.

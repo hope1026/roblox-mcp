@@ -41,6 +41,27 @@ All notable changes to this project will be documented in this file.
 
 
 
+
+## [2.15.0] - 2026-08-27
+
+### Features
+
+- **Keep Studio connected when an Agent session ends** — The Studio Plugin connection now belongs to a shared WEPPY Bridge instead of an individual AI Agent session. Closing or switching an Agent no longer shuts down that shared connection, reducing unnecessary reconnect waits and request retries. No settings change is required.
+- **See each connection boundary in Dashboard** — The Connection page now shows AI Agents, their per-session MCP Adapters, the shared WEPPY Bridge, and Studio Targets as separate connected roles, with the current state of each connection.
+
+### Bug Fixes
+
+- **Resume a paused Playtest after delayed Studio status updates** — A stale running observation no longer overwrites the requested paused state before the resume command is processed.
+- **Keep required responsive checks in UI Studio reviews** — UI Studio now preserves a design's required screen-size review setting through its check summary, so unfinished required coverage remains visible instead of being treated as optional.
+- **Use terrain fill materials without misleading warnings** — Block, ball, cylinder, and wedge terrain fills now recognize the selected material as a valid option instead of reporting it as unused.
+- **Resolve animation controls from Model paths** — Animation track requests now find a Model's Humanoid or AnimationController, while direct controller paths continue to work.
+- **Explain Studio asset upload failures more clearly** — When Roblox Studio cannot run an asset upload, WEPPY now returns the failure stage and actionable guidance instead of an ambiguous error.
+
+### Stability
+
+- **Recover the shared Studio connection after a Bridge failure** — An active Agent automatically restores an unexpectedly stopped WEPPY Bridge and waits for the Studio Plugin to reconnect before handling the next request. A change command whose completion cannot be confirmed is not repeated automatically, preventing the same change from being applied twice.
+- **Coordinate multiple Agent sessions through one verified Bridge** — Concurrent Agents now discover and share the same authenticated local runtime instead of competing for the Studio connection. Startup, shutdown, and stale runtime recovery use the same ownership checks on macOS and Windows.
+
 ## [2.14.6] - 2026-08-25
 
 ### ⚠️ BREAKING CHANGES
