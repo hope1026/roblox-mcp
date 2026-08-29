@@ -2946,7 +2946,7 @@ Control Roblox Studio state for playtest lifecycle, automated test runs, and edi
 - Execution mode: `unspecified`
 - Param aliases: none
 - Required params:
-  - `testProfile` - StudioTestProfile - Optional Player Emulator test profile patch. Used by: test_profile_set, play_start, run_test.
+  - `testProfile` - StudioTestProfile - Optional Player Emulator test profile patch. Used by: test_profile_set, play_start, test_session_start, run_test.
 - Optional params:
   - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
   - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
@@ -2998,8 +2998,8 @@ Control Roblox Studio state for playtest lifecycle, automated test runs, and edi
 - Required params: none
 - Optional params:
   - `mode` - "play" | "run" - Playtest mode. "play" = Play mode (F5, default), "run" = Run mode (F8). Used by: play_start, run_test.
-  - `testProfile` - StudioTestProfile - Optional Player Emulator test profile patch. Used by: test_profile_set, play_start, run_test.
-  - `restoreAfterTest` - boolean - Restore the profile snapshot after the play session or automated test finishes. Defaults to true when testProfile is provided. Used by: play_start, run_test.
+  - `testProfile` - StudioTestProfile - Optional Player Emulator test profile patch. Used by: test_profile_set, play_start, test_session_start, run_test.
+  - `restoreAfterTest` - boolean - Restore the profile snapshot after the play session or automated test finishes. Defaults to true when testProfile is provided. Used by: play_start, test_session_start, run_test.
   - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
   - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
   - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.
@@ -3052,20 +3052,75 @@ Control Roblox Studio state for playtest lifecycle, automated test runs, and edi
   - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
   - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.
 
-### `manage_studio.run_test`
+### `manage_studio.test_session_start`
+
+Start a structured Play-default test session after complete preflight validation.
 
 - Tier: `pro`
 - Route: `internal`
 - Execution mode: `unspecified`
 - Param aliases: none
 - Required params:
-  - `script` - string - Luau test body to inject into ServerScriptService.__MCP_TestRunner. Used by: run_test.
+  - `scenario` - TestSessionScenario - Structured protocol v1 scenario. Mode defaults to play and clients defaults to one. Used by: test_session_start.
+- Optional params:
+  - `idempotencyKey` - string - Optional idempotency key scoped to the pinned Studio target and normalized scenario. Used by: test_session_start.
+  - `testProfile` - StudioTestProfile - Optional Player Emulator test profile patch. Used by: test_profile_set, play_start, test_session_start, run_test.
+  - `restoreAfterTest` - boolean - Restore the profile snapshot after the play session or automated test finishes. Defaults to true when testProfile is provided. Used by: play_start, test_session_start, run_test.
+  - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
+  - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
+  - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.
+  - `contextId` - string - Optional execution context identifier. Used to continue an existing context for mutating actions.
+  - `contextSummary` - ExecutionContextSummary - Optional structured execution context attached to this tool call.
+  - `replayMetadata` - ExecutionReplayMetadata - Optional replay-ready metadata attached to this tool call.
+
+### `manage_studio.test_session_status`
+
+Read a bounded page of structured test session status and step evidence.
+
+- Tier: `pro`
+- Route: `internal`
+- Execution mode: `readonly`
+- Param aliases: none
+- Required params:
+  - `sessionId` - string - Structured test session identifier returned by test_session_start. Used by: test_session_status, test_session_stop.
+- Optional params:
+  - `stepCursor` - string - Optional opaque cursor returned by a previous status page. Used by: test_session_status.
+  - `stepLimit` - integer - Maximum step evidence entries in one status page. Defaults to 20 and cannot exceed 50. Used by: test_session_status.
+  - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
+  - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
+  - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.
+
+### `manage_studio.test_session_stop`
+
+Request cancellation and bounded teardown for a structured test session.
+
+- Tier: `pro`
+- Route: `internal`
+- Execution mode: `unspecified`
+- Param aliases: none
+- Required params:
+  - `sessionId` - string - Structured test session identifier returned by test_session_start. Used by: test_session_status, test_session_stop.
+- Optional params:
+  - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
+  - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
+  - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.
+
+### `manage_studio.run_test`
+
+Legacy explicit opt-in executionKind="raw_luau" runner. Do not select it for ordinary structured test requests.
+
+- Tier: `pro`
+- Route: `internal`
+- Execution mode: `unspecified`
+- Param aliases: none
+- Required params:
+  - `script` - string - Luau test body for the explicit legacy opt-in executionKind="raw_luau" path. It is injected into ServerScriptService.__MCP_TestRunner. Used by: run_test only.
 - Optional params:
   - `mode` - "play" | "run" - Playtest mode. "play" = Play mode (F5, default), "run" = Run mode (F8). Used by: play_start, run_test.
   - `test_name` - string - Optional report display name for the automated playtest run. Used by: run_test.
   - `timeout` - number - Timeout in seconds for the automated playtest run. Default: 60. Maximum: 300. Used by: run_test.
-  - `testProfile` - StudioTestProfile - Optional Player Emulator test profile patch. Used by: test_profile_set, play_start, run_test.
-  - `restoreAfterTest` - boolean - Restore the profile snapshot after the play session or automated test finishes. Defaults to true when testProfile is provided. Used by: play_start, run_test.
+  - `testProfile` - StudioTestProfile - Optional Player Emulator test profile patch. Used by: test_profile_set, play_start, test_session_start, run_test.
+  - `restoreAfterTest` - boolean - Restore the profile snapshot after the play session or automated test finishes. Defaults to true when testProfile is provided. Used by: play_start, test_session_start, run_test.
   - `placeId` - number - Optional Studio target selector. When multiple Studio clients are connected, route this call to the active client for this Roblox placeId. If no matching active client exists, the call fails instead of falling back to another Place.
   - `clientId` - string - Optional Studio target selector. Routes this call to the exact connected WEPPY Plugin client. Takes precedence over targetAlias and placeId.
   - `targetAlias` - string - Optional Studio target selector. Routes this call to the connected WEPPY Studio target alias shown in Dashboard/Plugin, such as studio-1. Takes precedence over placeId.

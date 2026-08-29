@@ -15,7 +15,7 @@ terrain, and more — inside a live Studio session.
 - Action-based MCP tools covering the full Roblox Studio API surface
 - Basic Luau syntax validation for raw source or an existing Script without starting Playtest
 - Bidirectional project sync between Roblox Studio and local files (Pro)
-- Automated playtest: AI starts/stops Play/Run, injects test scripts, collects logs
+- Structured Playtest: ordinary checks use Play and record UI, input, and server evidence locally
 - UI Studio: AI creates in-game UI that matches your game's style or analyzes existing UI and suggests improvements
 - Web dashboard: monitor AI actions, tool history, sync state, changelog, and multi-agent / multi-Studio Connection topology with Studio Targets at `http://localhost:3002`
 - Multi-place support (up to 5 places simultaneously)
@@ -50,6 +50,20 @@ full valid details too. The first request that needs WASM downloads the exact
 not sent to a remote validation service. If no parser is available, the action
 reports validation as unavailable without turning a successful write into a
 failure.
+
+## Playtest verification
+
+Ordinary runtime verification uses a structured Play session. The AI can wait
+for UI, inspect semantic structure and geometry, deliver virtual input, observe
+activation separately, and verify the server result in another step. The local
+Dashboard groups saved evidence by server, client UI, interaction, and visual
+status.
+
+Run mode is for an explicitly requested server-only check. Raw Luau is an
+advanced explicit opt-in when a diagnostic does not fit the structured steps.
+Play-mode screenshot capture is not supported; semantic UI, input delivery,
+activation, and server observations are recorded instead. Existing Raw Luau
+reports remain readable and no setting change is required.
 
 ## Installation
 
