@@ -44,6 +44,17 @@ All notable changes to this project will be documented in this file.
 
 
 
+
+## [2.16.1] - 2026-08-29
+
+### Features
+
+- **Review Dashboard records without losing the list** — Playtest history now uses the full content area instead of reserving an empty report panel, and Playtest, Tools History, and UI Studio open record details in the same focused dialog. You can compare more runs at once, inspect the full evidence or routing details, then return to the same list position and filters.
+
+### Bug Fixes
+
+- **Show the correct Playtest outcome and newest runs first** — Structured Playtest history now keeps passed, failed, timed out, cancelled, and insufficient-evidence results distinct, and sorts legacy and structured timestamps by their actual time instead of their text format.
+
 ## [2.16.0] - 2026-08-29
 
 ### Features
