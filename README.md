@@ -160,11 +160,13 @@ The first validation that needs the companion parser downloads the exact `luau-p
 
 ### 6) Playtest: Let AI run and verify tests automatically
 
-AI can control Roblox Studio playtests directly. It can start and stop Play (F5) or Run (F8), inject test scripts, collect logs, and generate local reports automatically.
+Ordinary runtime checks use a structured Play session. AI can wait for game UI, inspect its semantic structure and geometry, deliver virtual input, observe the UI response, and verify the resulting server state in separate evidence steps. The local Dashboard groups the saved result by server, client UI, interaction, and visual evidence so you can review what passed and why.
 
-- "Start a Run-mode playtest and check whether the NPC reaches the target."
-- "Write a test that verifies the SpawnLocation is above the ground and run it."
-- "Validate that the script I just changed runs without errors in playtest."
+- "Start a Playtest, press the Start button, and verify the round begins on the server."
+- "Check that the HUD appears and the selected card activates after input."
+- "Validate that the script I just changed runs without errors in Playtest."
+
+Run mode is reserved for an explicitly requested server-only check. Raw Luau remains available as an advanced explicit opt-in for diagnostics that do not fit the structured steps. Play-mode screenshot capture is not supported; UI structure, geometry, input delivery, activation, and server observations are recorded instead. Reports stay local, existing Raw Luau reports remain readable, and no setting change is required.
 
 ![WEPPY Playtest Dashboard - Test history and detailed report](https://raw.githubusercontent.com/hope1026/weppy-roblox-mcp/main/docs/assets/screenshots/dashboard/dashboard_playtest.png)
 

@@ -9,7 +9,10 @@ Use playtest actions when verifying runtime behavior, collecting logs, or creati
 - `manage_studio.play_pause`: pause a running playtest.
 - `manage_studio.play_resume`: resume a paused playtest.
 - `manage_studio.play_stop`: stop a playtest.
-- `manage_studio.run_test`: inject a Luau test body, run playtest, collect logs, and write report files.
+- `manage_studio.test_session_start`: start a structured test session. It defaults to Play mode and one client.
+- `manage_studio.test_session_status`: read bounded progress and step evidence without copying the full result.
+- `manage_studio.test_session_stop`: cancel a structured session and request teardown.
+- `manage_studio.run_test`: use the legacy `executionKind="raw_luau"` path as an explicit advanced diagnostic opt-in.
 
 ## Locale Test Environment
 
@@ -23,13 +26,21 @@ Player Emulator settings and the in-experience language are separate capabilitie
 
 The stable plugin does not use private Player Emulator services or CoreGui input automation. When no public profile provider or opted-in language adapter is available, set operations return structured `test_profile_manual_required` or `experience_language_manual_required` failures. Do not treat requested values as applied values.
 
-`manage_studio.play_start` and `manage_studio.run_test` accept an optional `testProfile` patch and `restoreAfterTest`. Profile application must succeed before play starts. With restoration enabled, the selected Studio target's snapshot is restored on success, error, timeout, or cancellation. Use `manage_studio.play_status` to inspect `activeTestProfileResult` and `lastTestProfileResult` for a manually started play session.
+`manage_studio.play_start`, `manage_studio.test_session_start`, and `manage_studio.run_test` accept an optional `testProfile` patch and `restoreAfterTest`. Profile application must succeed before play starts. With restoration enabled, the selected Studio target's snapshot is restored on success, error, timeout, or cancellation. Use `manage_studio.play_status` to inspect `activeTestProfileResult` and `lastTestProfileResult` for a manually started play session.
 
 Read `mcp-actions.md` for exact params and tiers.
 
-## Automated Test Runner
+## Structured Test Session
 
-`manage_studio.run_test` requires `script`. Optional fields include `mode`, `test_name`, `timeout`, `testProfile`, `restoreAfterTest`, `contextId`, `contextSummary`, and `replayMetadata`.
+For ordinary runtime verification, use `test_session_start`. It defaults to Play mode with one client. The scenario is JSON-compatible data, runs sequential steps, and never carries a Luau function body. Choose Run only for an explicit server-only scenario.
+
+Poll `test_session_status` with the returned `sessionId`. The default page contains at most 20 step entries; `stepLimit` cannot exceed 50. Use the opaque `stepCursor` for the next page. Call `test_session_stop` to cancel a non-terminal session.
+
+For UI interaction checks, wait for the target UI, capture semantic UI structure and geometry, then use VirtualInput. Keep input delivery and `GuiButton.Activated` observation as separate evidence, and verify server effects in a separate server step. Play-mode screenshot capture is not supported, so do not substitute screenshot evidence for semantic UI or interaction evidence.
+
+## Legacy Raw Luau Runner
+
+`manage_studio.run_test` requires `script` and represents the Raw Luau explicit advanced diagnostic opt-in. Optional fields include `mode`, `test_name`, `timeout`, `testProfile`, `restoreAfterTest`, `contextId`, `contextSummary`, and `replayMetadata`.
 
 The runner wraps the user script, emits `[WEPPY_TEST]` log signals, collects `manage_logs` output, stops playtest during cleanup, and stores report artifacts under the active place test directory.
 

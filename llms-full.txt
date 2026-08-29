@@ -14,6 +14,8 @@ The WEPPY MCP Server and WEPPY Roblox Studio Plugin must come from the same rele
 
 The first request that needs WASM downloads the exact `luau-parser-v1.0.0` companion release and caches it locally; a compatible local `luau-compile` is the fallback. Source is parsed on the user's computer and is not sent to a remote validation service. If no parser is available, validation reports an unavailable status without turning a successful write into a failure. It checks only whether the Luau source parses.
 
+Ordinary runtime verification uses a structured Play session. The AI can wait for UI, inspect semantic structure and geometry, deliver virtual input, observe activation separately, and verify the server result in another step. The local Dashboard groups saved evidence by server, client UI, interaction, and visual status. Run mode is for an explicitly requested server-only check. Raw Luau is an advanced explicit opt-in when a diagnostic does not fit the structured steps. Play-mode screenshot capture is not supported; semantic UI, input delivery, activation, and server observations are recorded instead. Existing Raw Luau reports remain readable and no setting change is required.
+
 This package intentionally does not ship a standalone full documentation surface.
 
 Canonical documentation lives on the web:

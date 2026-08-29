@@ -43,6 +43,21 @@ All notable changes to this project will be documented in this file.
 
 
 
+
+## [2.16.0] - 2026-08-29
+
+### Features
+
+- **Test the player screen and server results in one Playtest** — AI agents can now run separate client and server checks in the same session, so they can verify visible UI, text, layout, locale, and player-facing behavior alongside authoritative gameplay state instead of relying only on injected server-side Luau and logs. Existing Raw Luau checks remain available for project-specific assertions, and no settings change is required.
+- **Review structured Playtest evidence in Dashboard** — Each recorded run now shows its steps, client or server context, expected and observed values, test dimensions, artifacts, and failure details. You can see why a check passed or failed without reconstructing the result from raw output logs.
+
+### Bug Fixes
+
+- **Keep optional observations from failing required checks** — Missing optional evidence no longer changes a successful required check into a failure, while genuine required failures still determine the final result.
+- **Preserve client-side failures in the final report** — Locale and environment observation errors no longer disappear when a Playtest ends, making client-specific failures visible to both the AI agent and Dashboard.
+- **Report real timeout durations and recover cleanly between runs** — Timed-out Raw Luau checks now retain their elapsed duration, and consecutive Playtest sessions no longer inherit stale interaction state from the previous run.
+- **Record screen-size evidence without serialization errors** — Client checks can now return viewport dimensions as structured evidence without failing on Roblox vector values.
+
 ## [2.15.1] - 2026-08-27
 
 ### Bug Fixes

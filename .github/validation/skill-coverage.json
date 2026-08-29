@@ -75,6 +75,9 @@
         "manage_studio.play_pause",
         "manage_studio.play_resume",
         "manage_studio.play_status",
+        "manage_studio.test_session_start",
+        "manage_studio.test_session_status",
+        "manage_studio.test_session_stop",
         "manage_studio.run_test"
       ]
     },
