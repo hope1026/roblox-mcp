@@ -45,6 +45,13 @@ All notable changes to this project will be documented in this file.
 
 
 
+
+## [2.16.2] - 2026-08-30
+
+### Features
+
+- **Review What's New details without leaving the release list** — Dashboard Changelog entries now open in a focused dialog while deep links and browser Back and Forward continue to work. Closing the dialog restores your list position, filters, and keyboard focus, while Game Change details remain inline.
+
 ## [2.16.1] - 2026-08-29
 
 ### Features
